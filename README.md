@@ -1,4 +1,4 @@
 # TasksManager
 Models structure:
-![img.png](img.png)
+https://prnt.sc/SWdNGmeuZCla
 
