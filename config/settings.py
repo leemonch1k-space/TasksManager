@@ -18,7 +18,8 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "crispy_forms",
     "crispy_bootstrap5",
-    "task"
+    "landing",
+    "task",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -98,3 +99,6 @@ INTERNAL_IPS = [
 ]
 
 AUTH_USER_MODEL = "task.Worker"
+
+LOGIN_REDIRECT_URL = "/work-space/"
+LOGOUT_REDIRECT_URL = "/"
