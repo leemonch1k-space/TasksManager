@@ -40,9 +40,9 @@ class Task(models.Model):
         MEDIUM = "MED", _("Medium")
         HIGH = "HIGH", _("High")
 
-    name = models.CharField(max_length=255, unique=True)
-    description = models.TextField(blank=True)
-    deadline = models.DateField()
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    deadline = models.DateField(blank=True, null=True)
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(
         max_length=4,
@@ -55,7 +55,7 @@ class Task(models.Model):
         null=True,
         related_name="tasks"
     )
-    assignees = models.ManyToManyField(Worker, related_name="tasks")
+    assignees = models.ManyToManyField(Worker, related_name="tasks", blank=True)
 
     class Meta:
         ordering = ["-priority"]
