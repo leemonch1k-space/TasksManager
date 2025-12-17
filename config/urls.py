@@ -4,5 +4,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("task.urls", namespace="task"))
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("work-space/", include("task.urls", namespace="task")),
+    path("", include("landing.urls", namespace="landing"))
 ] + debug_toolbar_urls()
