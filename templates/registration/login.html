@@ -3,6 +3,8 @@
 {% block header %}
   Log in
 {% endblock %}
+{% block slider %}
+{% endblock %}
 {% block content %}
   <h1>Login</h1>
   {% if form.errors %}
@@ -10,7 +12,11 @@
   {% endif %}
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
-    {{ form|crispy}}
-    <input type="submit" value="Submit">
+    {{ form|crispy }}
+    <input type="submit" value="Log in">
   </form>
+  <p>
+    New to IssueOut?
+    <a href="{% url 'registration' %}">Create new account!</a>
+  </p>
 {% endblock %}
