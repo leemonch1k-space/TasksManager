@@ -6,9 +6,15 @@ from django.utils.translation import gettext_lazy as _
 class TaskType(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Position(models.Model):
     name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Worker(AbstractUser):
@@ -23,6 +29,9 @@ class Worker(AbstractUser):
         verbose_name = "worker"
         verbose_name_plural = "workers"
         ordering = ["username"]
+
+    def __str__(self):
+        return f"{self.username} ({self.first_name} {self.last_name})"
 
 
 class Task(models.Model):
@@ -50,3 +59,6 @@ class Task(models.Model):
 
     class Meta:
         ordering = ["-priority"]
+
+    def __str__(self):
+        return f"{self.name} {self.deadline} {self.is_completed} {self.priority}"
