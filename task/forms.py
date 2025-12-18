@@ -1,20 +1,16 @@
 from django import forms
+from django.contrib.auth import get_user_model
 
 from task.models import Task, TaskType
 
 
 class TaskForm(forms.ModelForm):
-    priority = forms.ChoiceField(
-        choices=Task.Priority.choices,
-        required=False,
-        widget=forms.Select(attrs={"class": "form-control"})
-    )
-    task_type = forms.ModelChoiceField(
-        queryset=TaskType.objects.all(),
-        required=False,
-        empty_label="Select type",
-        widget=forms.Select(attrs={"class": "form-control"})
-    )
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(TaskForm, self).__init__(*args, **kwargs)
+
+        if self.user:
+            self.fields['assignees'].queryset = get_user_model().objects.exclude(pk=self.user.pk)
 
     class Meta:
         model = Task
@@ -32,3 +28,16 @@ class TaskForm(forms.ModelForm):
             ),
             "assignees": forms.CheckboxSelectMultiple(),
         }
+
+    priority = forms.ChoiceField(
+        choices=Task.Priority.choices,
+        required=False,
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+    task_type = forms.ModelChoiceField(
+        queryset=TaskType.objects.all(),
+        required=False,
+        empty_label="Select type",
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+

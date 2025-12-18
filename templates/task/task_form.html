@@ -1,84 +1,80 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block content %}
-  <form method="post" id="task-form" novalidate>
-    {% csrf_token %}
 
-    <div class="mb-3">
-      {{ form.name }}
-      {% if form.name.errors %}
-        <div class="text-danger small">{{ form.name.errors }}</div>
+<form method="post" id="task-form" novalidate>
+  {% csrf_token %}
+
+  <div class="mb-3">
+    {{ form.name }}
+    {% if form.name.errors %}
+      <div class="text-danger small">{{ form.name.errors }}</div>
+    {% endif %}
+  </div>
+
+  <div class="expandable-wrapper mb-3">
+    <div class="add-btn" id="add-desc-btn">
+      <i class="fas fa-align-left"></i> Add description
+    </div>
+    <div class="field-container d-none">
+      {{ form.description }}
+      {% if form.description.errors %}
+        <div class="text-danger small">{{ form.description.errors }}</div>
       {% endif %}
     </div>
+  </div>
 
-    <div class="expandable-wrapper mb-3">
-      <div class="add-btn" id="add-desc-btn">
-        <i class="fas fa-align-left"></i> Add description
-      </div>
-      <div class="field-container d-none">
-        {{ form.description }}
-        {% if form.description.errors %}
-          <div class="text-danger small">{{ form.description.errors }}</div>
-        {% endif %}
-      </div>
+  <div class="expandable-wrapper mb-3">
+    <div class="add-btn" id="add-deadline-btn">
+      <i class="fas fa-calendar-alt"></i> Set deadline
     </div>
-
-    <div class="expandable-wrapper mb-3">
-      <div class="add-btn" id="add-deadline-btn">
-        <i class="fas fa-calendar-alt"></i> Set deadline
-      </div>
-      <div class="field-container d-none">
-        {{ form.deadline }}
-        {% if form.deadline.errors %}
-          <div class="text-danger small">{{ form.deadline.errors }}</div>
-        {% endif %}
-      </div>
+    <div class="field-container d-none">
+      {{ form.deadline }}
+      {% if form.deadline.errors %}
+        <div class="text-danger small">{{ form.deadline.errors }}</div>
+      {% endif %}
     </div>
+  </div>
 
-    <div class="expandable-wrapper mb-3">
-      <div class="add-btn" id="add-priority-btn">
-        <i class="fas fa-flag"></i> Set priority
-      </div>
-      <div class="field-container d-none">
-        {{ form.priority }}
-        {% if form.priority.errors %}
-          <div class="text-danger small">{{ form.priority.errors }}</div>
-        {% endif %}
-      </div>
+  <div class="expandable-wrapper mb-3">
+    <div class="add-btn" id="add-priority-btn">
+      <i class="fas fa-flag"></i> Set priority
     </div>
-
-    <div class="expandable-wrapper mb-3">
-      <div class="add-btn" id="add-task-type-btn">
-        <i class="fas fa-tag"></i> Set type
-      </div>
-      <div class="field-container d-none">
-        {{ form.task_type }}
-        {% if form.task_type.errors %}
-          <div class="text-danger small">{{ form.task_type.errors }}</div>
-        {% endif %}
-      </div>
+    <div class="field-container d-none">
+      {{ form.priority }}
+      {% if form.priority.errors %}
+        <div class="text-danger small">{{ form.priority.errors }}</div>
+      {% endif %}
     </div>
+  </div>
 
-    <div class="expandable-wrapper mb-3">
-      <div class="add-btn" id="add-assignee-btn">
-        <i class="fas fa-user-plus"></i> Assignees
-      </div>
-      <div class="field-container d-none">
-        <label class="form-label">Select Workers:</label>
-        {{ form.assignees }}
-        {% if form.assignees.errors %}
-          <div class="text-danger small">{{ form.assignees.errors }}</div>
-        {% endif %}
-      </div>
+  <div class="expandable-wrapper mb-3">
+    <div class="add-btn" id="add-task-type-btn">
+      <i class="fas fa-tag"></i> Set type
     </div>
-
-    <div class="mt-4">
-      <button type="submit" class="btn btn-primary">Create Task</button>
-      <a href="{% url 'task:home' %}" id="cancel-btn" class="btn btn-link text-muted">Cancel</a>
+    <div class="field-container d-none">
+      {{ form.task_type }}
+      {% if form.task_type.errors %}
+        <div class="text-danger small">{{ form.task_type.errors }}</div>
+      {% endif %}
     </div>
-  </form>
-{% endblock %}
+  </div>
 
-{% block scripts %}
-  <script src="{% static 'js/task-form.js' %}"></script>
-{% endblock %}
+  <div class="expandable-wrapper mb-3">
+    <div class="add-btn" id="add-assignee-btn">
+      <i class="fas fa-user-plus"></i> Assignees
+    </div>
+    <div class="field-container d-none">
+      <label class="form-label">Select Workers:</label>
+      {{ form.assignees }}
+      {% if form.assignees.errors %}
+        <div class="text-danger small">{{ form.assignees.errors }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <button type="submit" class="btn btn-primary">Create Task</button>
+    <a href="{% url 'task:home' %}" id="cancel-btn" class="btn btn-link text-muted">Cancel</a>
+  </div>
+</form>
+
+<script src="{% static 'js/task_form.js' %}"></script>

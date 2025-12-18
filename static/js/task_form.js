@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (btn && container) {
             btn.addEventListener('click', function () {
-                btn.classList.add('d-none'); // Ховаємо кнопку
-                container.classList.remove('d-none'); // Показуємо поле
+                btn.classList.add('d-none');
+                container.classList.remove('d-none');
 
                 const input = container.querySelector('input, textarea, select');
                 if (input) input.focus();

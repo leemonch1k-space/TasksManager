@@ -1,0 +1,93 @@
+{% load static %}
+{% load crispy_forms_filters %}
+
+<div class="container mt-5">
+  <form method="post" action="{% url 'task:task-update' pk=task.pk %}" id="task-detail-form" novalidate>
+    {% csrf_token %}
+
+    <div class="editable-field mb-4" data-field="name">
+      <div class="display-value" style="cursor: pointer;">
+        <h1 class="mb-0">{{ task.name }}</h1>
+      </div>
+      <div class="edit-control d-none">
+        {{ form.name|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="editable-field border-bottom pb-2" data-field="priority">
+          <label class="text-muted small d-block">Priority</label>
+          <div class="display-value" style="cursor: pointer;">
+            <span
+                class="badge bg-{% if task.priority == 'HIGH' %}danger{% elif task.priority == 'MED' %}warning text-dark{% else %}info{% endif %}">
+              {{ task.get_priority_display }}
+            </span>
+          </div>
+          <div class="edit-control d-none">
+            {{ form.priority|as_crispy_field }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="editable-field border-bottom pb-2" data-field="deadline">
+          <label class="text-muted small d-block">Deadline</label>
+          <div class="display-value" style="cursor: pointer;">
+            <span>{{ task.deadline|date:"M d, Y"|default:"No deadline" }}</span>
+          </div>
+          <div class="edit-control d-none">
+            {{ form.deadline|as_crispy_field }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="editable-field border-bottom pb-2" data-field="task_type">
+          <label class="text-muted small d-block">Task Type</label>
+          <div class="display-value" style="cursor: pointer;">
+            {{ task.task_type.name|default:"Empty" }}
+          </div>
+          <div class="edit-control d-none">
+            {{ form.task_type|as_crispy_field }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="editable-field mb-4" data-field="description">
+      <div class="display-value p-3 border rounded bg-light" style="min-height: 100px; cursor: pointer;">
+        <label class="text-muted small d-block mb-2">Description</label>
+        {% if task.description %}
+          {{ task.description|linebreaks }}
+        {% else %}
+          <span class="text-secondary italic">Add description...</span>
+        {% endif %}
+      </div>
+      <div class="edit-control d-none">
+        {{ form.description|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="editable-field mb-4" data-field="assignees">
+      <div class="display-value p-3 border rounded" style="cursor: pointer;">
+        <label class="text-muted small d-block mb-2">Assignees</label>
+        {% for worker in task.assignees.all %}
+          <span class="badge rounded-pill bg-light text-dark border me-1">{{ worker.username }}</span>
+        {% empty %}
+          <span class="text-secondary">No assignees</span>
+        {% endfor %}
+      </div>
+      <div class="edit-control d-none">
+        {{ form.assignees|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="fixed-bottom p-3 bg-white border-top shadow-lg d-none" id="save-btn-container" style="z-index: 1050;">
+      <div class="container d-flex justify-content-end gap-3">
+        <button type="button" class="btn btn-link text-secondary" onclick="window.location.reload()">Discard</button>
+        <button type="submit" class="btn btn-primary px-4 shadow-sm" id="save-btn">Save Changes</button>
+      </div>
+    </div>
+  </form>
+</div>
