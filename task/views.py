@@ -12,18 +12,17 @@ class WorkSpaceView(LoginRequiredMixin, generic.TemplateView):
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
-    queryset = Task.objects.all().select_related()
+    queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
-    queryset = Task.objects.all().select_related()
+    queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
     template_name = "task/task_detail.html"
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
-    queryset = Task.objects.all().select_related()
     form_class = TaskForm
     template_name = "task/task_form.html"
 
