@@ -1,6 +1,9 @@
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = "django-insecure-bxsv(z7zncgl!hq#mxp7w84w%eq^ta@t)y1gs*om^ai^$n1sc)"
 
@@ -101,4 +104,11 @@ INTERNAL_IPS = [
 AUTH_USER_MODEL = "task.Worker"
 
 LOGIN_REDIRECT_URL = "/work-space/"
+
 LOGOUT_REDIRECT_URL = "/"
+
+EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+EMAIL_HOST = os.environ["EMAIL_HOST"]
+EMAIL_PORT = os.environ["EMAIL_PORT"]
+EMAIL_USE_TLS = os.environ["EMAIL_USE_TLS"]

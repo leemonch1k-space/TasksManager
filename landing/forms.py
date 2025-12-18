@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from task.models import Position
 
 
+User = get_user_model()
+
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     position = forms.ModelChoiceField(
@@ -14,7 +16,7 @@ class RegistrationForm(UserCreationForm):
     )
 
     class Meta(UserCreationForm.Meta):
-        model = get_user_model()
+        model = User
         fields = UserCreationForm.Meta.fields + (
             "email",
             "position",
