@@ -12,6 +12,7 @@ from landing.mixins import AnonymousRequiredMixin
 from landing.services.email_service import EmailService
 from landing.services.token_service import user_token_activation
 
+User = get_user_model()
 
 class RegisterView(AnonymousRequiredMixin, generic.FormView):
     form_class = RegistrationForm
@@ -41,20 +42,28 @@ class RegisterView(AnonymousRequiredMixin, generic.FormView):
 
 class ActivateView(View):
     def get(self, request, uid, token):
-        user_id = urlsafe_base64_decode(uid)
-        user = get_user_model().objects.get(id=user_id)
+        try:
+            uid = urlsafe_base64_decode(uid).decode()
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
 
-        is_correct = user_token_activation.check_token(
-            user=user,
-            token=token
-        )
+        if user is not None:
+            if user.is_active:
+                messages.info(request, "Your account is already activated.")
 
-        if is_correct:
-            user.is_active = 1
-            user.save()
-            messages.success(request, "Your email was activated!")
-            return redirect("login")
-        messages.error(request, "Activation time expired! Sign up again.")
+                return redirect("login")
+
+            if user_token_activation.check_token(user, token):
+                user.is_active = True
+                user.save()
+
+                messages.success(
+                    request,
+                    "Thank you for confirming your email. Now you can login to your account.",
+                )
+                return redirect("login")
+        messages.error(self.request, "Email verification failed. Sign-up again.")
         return redirect("login")
 
 class LoginView(AnonymousRequiredMixin, auth_views.LoginView):
