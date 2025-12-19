@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
-from django.views import generic
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse, reverse_lazy
+from django.views import generic, View
 
 from task.forms import TaskForm
 from task.models import Task
@@ -27,12 +29,6 @@ class WorkSpaceView(LoginRequiredMixin, generic.TemplateView):
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
     queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
-
-
-class TaskDetailView(LoginRequiredMixin, generic.DetailView):
-    model = Task
-    queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
-    template_name = "task/task_detail.html"
 
 
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
@@ -76,6 +72,28 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
         return reverse("task:home")
 
 
-class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
-    ...
+class TaskDeleteView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        return render(request, "task/partials/delete_confirm.html", {"task": task})
 
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        task.delete()
+        response = HttpResponse("")
+        response["HX-Redirect"] = reverse("task:home")
+        return response
+
+
+class TaskDeleteCancelView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        return HttpResponse(f"""
+            <button type="button" 
+                    class="btn btn-outline-danger"
+                    hx-get="{reverse('task:task-delete', kwargs={'pk': task.pk})}"
+                    hx-target="#delete-area"
+                    hx-swap="innerHTML">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        """)

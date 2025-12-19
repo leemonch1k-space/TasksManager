@@ -1,0 +1,20 @@
+<div class="d-flex align-items-center bg-light p-2 rounded border shadow-sm animate-fade-in">
+    <span class="text-danger small me-3"><strong>Delete this task?</strong></span>
+
+    <div class="btn-group btn-group-sm">
+        <button type="button"
+                class="btn btn-danger"
+                hx-post="{% url 'task:task-delete' task.pk %}"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+            Yes
+        </button>
+
+        <button type="button"
+                class="btn btn-secondary"
+                hx-get="{% url 'task:task-delete-cancel' task.pk %}"
+                hx-target="#delete-area"
+                hx-swap="innerHTML">
+            No
+        </button>
+    </div>
+</div>
