@@ -1,78 +1,107 @@
 {% load static %}
 
-<form method="post" id="task-form" novalidate>
+<form hx-post="{% url 'task:task-create' %}"
+      hx-target="this"
+      hx-swap="outerHTML"
+      method="post"
+      novalidate
+      class="h-100 w-100 d-flex flex-column justify-content-center">
   {% csrf_token %}
 
-  <div class="mb-3">
-    {{ form.name }}
-    {% if form.name.errors %}
-      <div class="text-danger small">{{ form.name.errors }}</div>
-    {% endif %}
-  </div>
+  <div class="card shadow-sm border-0 h-100">
+    <div class="card-body p-4 text-center align-content-center">
 
-  <div class="expandable-wrapper mb-3">
-    <div class="add-btn" id="add-desc-btn">
-      <i class="fas fa-align-left"></i> Add description
-    </div>
-    <div class="field-container d-none">
-      {{ form.description }}
-      {% if form.description.errors %}
-        <div class="text-danger small">{{ form.description.errors }}</div>
-      {% endif %}
-    </div>
-  </div>
+      <h4 class="mb-4 text-secondary"><i class="bi bi-plus-circle-dotted me-2"></i>New Task</h4>
 
-  <div class="expandable-wrapper mb-3">
-    <div class="add-btn" id="add-deadline-btn">
-      <i class="fas fa-calendar-alt"></i> Set deadline
-    </div>
-    <div class="field-container d-none">
-      {{ form.deadline }}
-      {% if form.deadline.errors %}
-        <div class="text-danger small">{{ form.deadline.errors }}</div>
-      {% endif %}
-    </div>
-  </div>
+      <div class="mb-4">
+        {% if form.name.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ form.name.errors }}
+          </div>
+        {% endif %}
+        {{ form.name }}
+      </div>
 
-  <div class="expandable-wrapper mb-3">
-    <div class="add-btn" id="add-priority-btn">
-      <i class="fas fa-flag"></i> Set priority
-    </div>
-    <div class="field-container d-none">
-      {{ form.priority }}
-      {% if form.priority.errors %}
-        <div class="text-danger small">{{ form.priority.errors }}</div>
-      {% endif %}
-    </div>
-  </div>
+      <div class="row g-3 mb-3">
 
-  <div class="expandable-wrapper mb-3">
-    <div class="add-btn" id="add-task-type-btn">
-      <i class="fas fa-tag"></i> Set type
-    </div>
-    <div class="field-container d-none">
-      {{ form.task_type }}
-      {% if form.task_type.errors %}
-        <div class="text-danger small">{{ form.task_type.errors }}</div>
-      {% endif %}
-    </div>
-  </div>
+        <div class="col-md-4 toggle-block">
+          <div
+              class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center cursor-pointer">
+            {% if form.deadline.errors %}
+              <div class="alert alert-danger" role="alert">
+                incorrect date
+              </div>
+            {% endif %}
+            <div class="hide_on_click text-muted w-100" role="button">
+              <i class="bi bi-calendar-x me-1"></i> Set deadline
+            </div>
+            <div class="d-none open_after_click w-100">{{ form.deadline }}</div>
+          </div>
+        </div>
 
-  <div class="expandable-wrapper mb-3">
-    <div class="add-btn" id="add-assignee-btn">
-      <i class="fas fa-user-plus"></i> Assignees
-    </div>
-    <div class="field-container d-none">
-      <label class="form-label">Select Workers:</label>
-      {{ form.assignees }}
-      {% if form.assignees.errors %}
-        <div class="text-danger small">{{ form.assignees.errors }}</div>
-      {% endif %}
-    </div>
-  </div>
+        <div class="col-md-4 toggle-block">
+          <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
+            {% if form.priority.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ form.priority.errors }}
+              </div>
+            {% endif %}
+            <div class="hide_on_click text-muted w-100" role="button">
+              <i class="bi bi-flag me-1"></i> Set priority
+            </div>
+            <div class="d-none open_after_click w-100">{{ form.priority }}</div>
+          </div>
+        </div>
 
-  <div class="mt-4">
-    <button type="submit" class="btn btn-primary">Create Task</button>
-    <a href="{% url 'task:home' %}" id="cancel-btn" class="btn btn-link text-muted">Cancel</a>
+        <div class="col-md-4 toggle-block">
+          <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
+            {% if form.task_type.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ form.task_type.errors }}
+              </div>
+            {% endif %}
+            <div class="hide_on_click text-muted w-100" role="button">
+              <i class="bi bi-tag me-1"></i> Set type
+            </div>
+            <div class="d-none open_after_click w-100">{{ form.task_type }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 toggle-block">
+        {% if form.description.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ form.description.errors }}
+          </div>
+        {% endif %}
+        <div class="hide_on_click p-3 border rounded bg-light text-muted" role="button">
+          <i class="bi bi-card-text me-2"></i> Add description...
+        </div>
+        <div class="d-none open_after_click">
+          {{ form.description }}
+        </div>
+      </div>
+
+      <div class="mb-4 toggle-block">
+        {% if form.assignees.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ form.assignees.errors }}
+          </div>
+        {% endif %}
+        <div class="hide_on_click p-2 border rounded bg-light text-center text-muted" role="button">
+          <i class="bi bi-person-fill-gear me-2"></i> Set assignees
+        </div>
+        <div class="d-none open_after_click p-3 border rounded bg-white">
+          <p class="small text-muted mb-2">Select team members:</p>
+          {{ form.assignees }}
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center gap-2 border-top pt-3">
+        <button type="submit" class="btn btn-primary px-4">Create Task</button>
+        <a href="{{ next }}" class="btn btn-outline-secondary px-4">Cancel</a>
+      </div>
+
+    </div>
   </div>
 </form>

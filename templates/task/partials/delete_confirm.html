@@ -1,20 +1,17 @@
-<div class="d-flex align-items-center bg-light p-2 rounded border shadow-sm animate-fade-in">
-    <span class="text-danger small me-3"><strong>Delete this task?</strong></span>
-
-    <div class="btn-group btn-group-sm">
-        <button type="button"
-                class="btn btn-danger"
-                hx-post="{% url 'task:task-delete' task.pk %}"
-                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-            Yes
-        </button>
-
-        <button type="button"
-                class="btn btn-secondary"
-                hx-get="{% url 'task:task-delete-cancel' task.pk %}"
-                hx-target="#delete-area"
-                hx-swap="innerHTML">
-            No
-        </button>
-    </div>
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Delete Task</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="fs-5">Are you sure?</p>
+    <p class="text-danger">Removed task <strong>"{{ task.name }}"</strong> can't be restored.</p>
+  </div>
+  <div class="modal-footer justify-content-center">
+    <form hx-post="{% url 'task:task-delete' task.pk %}" hx-target="#workspace_cards">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger px-4" data-bs-dismiss="modal">Yes</button>
+    </form>
+    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">No</button>
+  </div>
 </div>

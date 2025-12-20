@@ -1,106 +1,120 @@
 {% load static %}
-{% load crispy_forms_filters %}
 
-<div class="container mt-5">
-  <form method="post" action="{% url 'task:task-update' pk=task.pk %}" id="task-detail-form" novalidate>
-    {% csrf_token %}
+<form method="post" action="{% url 'task:task-update' task.pk %}"
+      novalidate
+      class="h-100 w-100 d-flex flex-column justify-content-center btn-on-change">
+  {% csrf_token %}
 
-    <div class="editable-field mb-4" data-field="name">
-      <div class="display-value" style="cursor: pointer;">
-        <h1 class="mb-0">{{ task.name }}</h1>
-      </div>
-      <div class="edit-control d-none">
-        {{ form.name|as_crispy_field }}
-      </div>
-    </div>
+  <div class="card shadow-sm border-0 h-100">
+    <div class="card-body p-4 text-center align-content-center">
 
-    <div class="row mb-4">
-      <div class="col-md-4">
-        <div class="editable-field border-bottom pb-2" data-field="priority">
-          <label class="text-muted small d-block">Priority</label>
-          <div class="display-value" style="cursor: pointer;">
-            <span
-                class="badge bg-{% if task.priority == 'HIGH' %}danger{% elif task.priority == 'MED' %}warning text-dark{% else %}info{% endif %}">
-              {{ task.get_priority_display }}
-            </span>
-          </div>
-          <div class="edit-control d-none">
-            {{ form.priority|as_crispy_field }}
-          </div>
-        </div>
-      </div>
+      <h4 class="mb-4 text-secondary">
+        <a href="{{ next }}" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-up-left"></i></a>
+        <i class="user-select-none">Task name</i>
+        <button type="button"
+                class="btn btn-outline-danger"
+                hx-get="{% url 'task:task-delete' task.pk %}"
+                hx-target="#modal-content"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-container">
+          <i class="bi bi-trash3"></i>
+        </button>
+      </h4>
 
-      <div class="col-md-4">
-        <div class="editable-field border-bottom pb-2" data-field="deadline">
-          <label class="text-muted small d-block">Deadline</label>
-          <div class="display-value" style="cursor: pointer;">
-            <span>{{ task.deadline|date:"M d, Y"|default:"No deadline" }}</span>
+      <div class="mb-4">
+        {% if form.name.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ form.name.errors }}
           </div>
-          <div class="edit-control d-none">
-            {{ form.deadline|as_crispy_field }}
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="editable-field border-bottom pb-2" data-field="task_type">
-          <label class="text-muted small d-block">Task Type</label>
-          <div class="display-value" style="cursor: pointer;">
-            {{ task.task_type.name|default:"Empty" }}
-          </div>
-          <div class="edit-control d-none">
-            {{ form.task_type|as_crispy_field }}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="editable-field mb-4" data-field="description">
-      <div class="display-value p-3 border rounded bg-light" style="min-height: 100px; cursor: pointer;">
-        <label class="text-muted small d-block mb-2">Description</label>
-        {% if task.description %}
-          {{ task.description|linebreaks }}
-        {% else %}
-          <span class="text-secondary italic">Add description...</span>
         {% endif %}
+        {{ form.name }}
       </div>
-      <div class="edit-control d-none">
-        {{ form.description|as_crispy_field }}
-      </div>
-    </div>
 
-    <div class="editable-field mb-4" data-field="assignees">
-      <div class="display-value p-3 border rounded" style="cursor: pointer;">
-        <label class="text-muted small d-block mb-2">Assignees</label>
-        {% for worker in task.assignees.all %}
-          <span class="badge rounded-pill bg-light text-dark border me-1">{{ worker.username }}</span>
-        {% empty %}
-          <span class="text-secondary">No assignees</span>
-        {% endfor %}
-      </div>
-      <div class="edit-control d-none">
-        {{ form.assignees|as_crispy_field }}
-      </div>
-    </div>
+      <div class="row g-3 mb-3">
 
-    <div class="fixed-bottom p-3 bg-white border-top shadow-lg d-none" id="save-btn-container" style="z-index: 1050;">
-      <div class="container d-flex justify-content-between align-items-center">
-
-        <div id="delete-area">
-          <button type="button"
-                  class="btn btn-outline-danger"
-                  hx-get="{% url 'task:task-delete' task.pk %}"
-                  hx-target="#delete-area"
-                  hx-swap="innerHTML">
-            <i class="fas fa-trash"></i> Delete
-          </button>
+        <div class="col-md-4 toggle-block">
+          <div
+              class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center cursor-pointer">
+            {% if form.deadline.errors %}
+              <div class="alert alert-danger" role="alert">
+                incorrect date
+              </div>
+            {% endif %}
+            <div class="text-muted w-100">
+              <div class="user-select-none"><i class="bi bi-calendar-x me-1"></i> Update deadline:</div>
+              <div class="open_after_click w-100 p-2">{{ form.deadline }}</div>
+            </div>
+          </div>
         </div>
 
-        <div class="d-flex gap-3">
-          <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload();">Cancel</button>
-          <button type="submit" class="btn btn-primary px-4 shadow-sm" id="save-btn">Save Changes</button>
+        <div class="col-md-4 toggle-block">
+          <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
+            {% if form.priority.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ form.priority.errors }}
+              </div>
+            {% endif %}
+            <div class="text-muted w-100">
+              <div class="user-select-none"><i class="bi bi-flag me-1"></i> Update priority</div>
+              <div class="open_after_click w-100 p-2">{{ form.priority }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 toggle-block">
+          <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
+            {% if form.task_type.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ form.task_type.errors }}
+              </div>
+            {% endif %}
+            <div class="text-muted w-100">
+              <div class="user-select-none"><i class="bi bi-tag me-1"></i> Update type</div>
+              <div class="w-100 p-2">{{ form.task_type }}</div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <div class="mb-3 toggle-block">
+        {% if form.description.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ form.description.errors }}
+          </div>
+        {% endif %}
+        <div class="p-3 border rounded bg-light text-muted">
+          <div class="user-select-none"><i class="bi bi-card-text me-2"></i> Update description</div>
+          <div class="p-2">
+            {{ form.description }}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4 toggle-block">
+        {% if form.assignees.errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ form.assignees.errors }}
+          </div>
+        {% endif %}
+        <div class="hide_on_click p-2 border rounded bg-light text-center text-muted" role="button">
+          <i class="bi bi-person-fill-gear me-2"></i> Set assignees
+        </div>
+        <div class="d-none open_after_click p-3 border rounded bg-white">
+          <p class="small text-muted mb-2">Select team members:</p>
+          {{ form.assignees }}
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center gap-2 border-top pt-3 appear-on-change d-none">
+        <button type="submit" class="btn btn-primary px-4">Update</button>
+        <button class="btn btn-outline-secondary px-4 btn-cancel">Cancel</button>
+      </div>
+
     </div>
-  </form>
+  </div>
+</form>
+
+<div id="modal-container" class="modal fade" tabindex="-1">
+  <div class="modal-dialog" id="modal-content">
+  </div>
 </div>
