@@ -44,10 +44,12 @@ class TaskListView(LoginRequiredMixin, NextUrlMixin, generic.ListView):
 class TaskListSearchView(generic.ListView):
     model = Task
     template_name = "task/partials/task_list_chunk.html"
+    paginate_by = 11
 
     def get_queryset(self):
-        queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
-
+        queryset = (Task.objects.filter(assignees=self.request.user)
+                    .select_related("task_type")
+                    .prefetch_related("assignees"))
         if search := self.request.GET.get("search"):
             queryset = queryset.filter(name__icontains=search)
 
@@ -55,7 +57,6 @@ class TaskListSearchView(generic.ListView):
             queryset = queryset.filter(priority=priority)
 
         return queryset
-
 
 
 class TaskCreateView(LoginRequiredMixin, NextUrlMixin, generic.CreateView):

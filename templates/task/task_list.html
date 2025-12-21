@@ -11,9 +11,14 @@
           hx-target="#tasks"
           class="mb-4">
 
-      <div class="col-md-3">
-      </div>
       <div class="row g-3 justify-content-center">
+        <div class="col-md-3 text-center flex-column btn btn-outline-success" id="create_block"
+             hx-get="{% url 'task:task-create' %}"
+             hx-target="#global_wrapper"
+             hx-swap="innerHTML">
+          New task
+        </div>
+
         <div class="col-md-5">
           <input type="search" name="search" class="form-control" placeholder="Search by name..."
                  value="{{ request.GET.search }}">
@@ -34,7 +39,6 @@
       </div>
     </form>
 
-
     <div class="htmx-indicator mt-2">
       <div class="spinner-border text-primary spinner-border-sm" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -44,18 +48,6 @@
   </div>
   <div class="d-flex row g-4 align-center" id="tasks">
 
-    <div class="col-md-3 text-center flex-column" id="create_block"
-         hx-get="{% url 'task:task-create' %}"
-         hx-target="#update"
-         hx-swap="innerHTML">
-      <div class="card h-100 border-dashed text-center p-5 shadow-sm workspace-card">
-        <div class="card-body d-flex flex-column justify-content-center" role="button">
-          <i class="bi bi-plus-circle-dotted text-primary fs-1 mb-2"></i>
-          <h5 class="fw-bold text-secondary">Create New Task</h5>
-          <p class="text-muted">Click here to add a new task</p>
-        </div>
-      </div>
-    </div>
 
     {% include "task/partials/task_list_chunk.html" %}
   </div>

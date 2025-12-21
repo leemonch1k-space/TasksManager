@@ -1,11 +1,11 @@
 {% if not task_list %}
-<h1 class="text-center p-3">No task found!</h1>
+  <h1 class="text-center p-3">No task found!</h1>
 {% endif %}
 
 {% for task in task_list %}
   <div class="col-md-3 card text-center border-dashed shadow-sm flex-column" role="button"
        hx-get="{% url 'task:task-update' task.id %}?next={{ request.path }}"
-       hx-target="#tasks"
+       hx-target="#global_wrapper"
        hx-swap="innerHTML"
   >
 
@@ -33,10 +33,11 @@
   </div>
 
   {% if forloop.last and page_obj.has_next %}
-    <div hx-get="{% url 'task:task-list' %}?page={{ page_obj.next_page_number }}"
-         hx-trigger="revealed"
-         hx-swap="afterend"
-         class="htmx-indicator">
+    <div
+        hx-get="{{ request.path }}?page={{ page_obj.next_page_number }}&search={{ request.GET.search|default:'' }}&priority={{ request.GET.priority|default:'' }}"
+        hx-trigger="revealed"
+        hx-swap="outerHTML"
+        class="htmx-indicator">
     </div>
   {% endif %}
 {% endfor %}
