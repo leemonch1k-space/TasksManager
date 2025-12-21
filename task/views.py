@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.views import generic, View
 
 from task.forms import TaskForm
@@ -30,6 +30,32 @@ class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
 class TaskListView(LoginRequiredMixin, NextUrlMixin, generic.ListView):
     model = Task
     queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
+    paginate_by = 11
+    def get_queryset(self):
+        user = self.request.user
+        return Task.objects.filter(assignees=user).select_related("task_type").order_by("-id")
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request"):
+            return ["task/partials/task_list_chunk.html"]
+        return ["task/task_list.html"]
+
+
+class TaskListSearchView(generic.ListView):
+    model = Task
+    template_name = "task/partials/task_list_chunk.html"
+
+    def get_queryset(self):
+        queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
+
+        if search := self.request.GET.get("search"):
+            queryset = queryset.filter(name__icontains=search)
+
+        if priority := self.request.GET.get("priority"):
+            queryset = queryset.filter(priority=priority)
+
+        return queryset
+
 
 
 class TaskCreateView(LoginRequiredMixin, NextUrlMixin, generic.CreateView):
@@ -56,7 +82,9 @@ class TaskUpdateView(LoginRequiredMixin, NextUrlMixin, generic.UpdateView):
     form_class = TaskForm
     queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
     template_name = "task/task_read_update.html"
-    success_url = reverse_lazy("task:home")
+
+    def get_success_url(self):
+        return self.get_next_url()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -77,8 +105,11 @@ class TaskUpdateView(LoginRequiredMixin, NextUrlMixin, generic.UpdateView):
 
 
 
+class TaskDeleteView(LoginRequiredMixin, NextUrlMixin, View):
 
-class TaskDeleteView(LoginRequiredMixin, View):
+    def get_success_url(self):
+        return self.get_next_url()
+
     def get(self, request, pk):
         task = get_object_or_404(Task, pk=pk)
         return render(request, "task/partials/delete_confirm.html", {"task": task})
@@ -87,5 +118,5 @@ class TaskDeleteView(LoginRequiredMixin, View):
         task = get_object_or_404(Task, pk=pk)
         task.delete()
         response = HttpResponse("")
-        response["HX-Redirect"] = reverse("task:home")
+        response["HX-Redirect"] = self.get_success_url()
         return response

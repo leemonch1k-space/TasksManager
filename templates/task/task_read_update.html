@@ -1,6 +1,6 @@
 {% load static %}
 
-<form method="post" action="{% url 'task:task-update' task.pk %}"
+<form method="post" action="{% url 'task:task-update' task.pk %}?next={{ next }}"
       novalidate
       class="h-100 w-100 d-flex flex-column justify-content-center btn-on-change">
   {% csrf_token %}

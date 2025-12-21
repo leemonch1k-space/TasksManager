@@ -4,14 +4,15 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body text-center">
-    <p class="fs-5">Are you sure?</p>
-    <p class="text-danger">Removed task <strong>"{{ task.name }}"</strong> can't be restored.</p>
+    <p>Are you sure you want to delete <strong>{{ task.name }}</strong>?</p>
+    <p class="text-danger small">This action cannot be undone.</p>
   </div>
   <div class="modal-footer justify-content-center">
-    <form hx-post="{% url 'task:task-delete' task.pk %}" hx-target="#workspace_cards">
+
+    <form hx-post="{% url 'task:task-delete' task.pk %}" hx-target="body">
       {% csrf_token %}
-      <button type="submit" class="btn btn-danger px-4" data-bs-dismiss="modal">Yes</button>
+      <button type="submit" class="btn btn-danger">Yes, Delete</button>
     </form>
-    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">No</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
   </div>
 </div>
