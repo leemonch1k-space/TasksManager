@@ -30,7 +30,7 @@ class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
 class TaskListView(LoginRequiredMixin, NextUrlMixin, generic.ListView):
     model = Task
     queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
-    paginate_by = 11
+    paginate_by = 16
     def get_queryset(self):
         user = self.request.user
         return Task.objects.filter(assignees=user).select_related("task_type").order_by("-id")
@@ -44,7 +44,7 @@ class TaskListView(LoginRequiredMixin, NextUrlMixin, generic.ListView):
 class TaskListSearchView(generic.ListView):
     model = Task
     template_name = "task/partials/task_list_chunk.html"
-    paginate_by = 11
+    paginate_by = 16
 
     def get_queryset(self):
         queryset = (Task.objects.filter(assignees=self.request.user)
