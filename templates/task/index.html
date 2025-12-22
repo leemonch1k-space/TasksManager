@@ -1,41 +1,161 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block header %}
-  My work-space
+  My Workspace | IssueOut
 {% endblock %}
+
 {% block content %}
+  <div class="container-fluid py-4" id="workspace_cards">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h2 class="fw-bold" style="color: #1a2a6c;">Welcome back, {{ user.username }}! 👋</h2>
+        <p class="text-muted">Here's what's happening with your projects today.</p>
+      </div>
+    </div>
 
-  <div id="workspace_cards" class="h-100">
-    <div class="row justify-content-center align-items-stretch g-4 h-100">
-
-      {% if task %}
-        <div class="col-md-6" id="update_block"
-             hx-get="{% url 'task:task-update' task.pk %}"
-             hx-target="#workspace_cards"
-             hx-swap="innerHTML">
-          <div class="card h-100 border-dashed text-center p-5 shadow-sm workspace-card">
-            <div class="card-body d-flex flex-column justify-content-center" role="button">
-              <i class="bi bi-dash-circle-dotted text-primary fs-1 mb-3"></i>
-              <h5 class="fw-bold text-secondary">Update last task</h5>
-              <p class="text-muted">Click here to update your last created task</p>
-            </div>
+    <div class="row g-4 mb-5 justify-content-center">
+      <div class="col-md-4 col-lg-3">
+        <div class="stat-card border-0 shadow-sm p-3 d-flex align-items-center">
+          <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+            <i class="bi bi-cpu text-primary fs-4"></i>
+          </div>
+          <div>
+            <h6 class="mb-0 text-muted small">In Progress</h6>
+            <span class="fw-bold fs-5">{{ task_count|default:"0" }} Tasks</span>
           </div>
         </div>
-      {% endif %}
-
-      <div class="col-md-6" id="create_block"
-           hx-get="{% url 'task:task-create' %}"
-           hx-target="#workspace_cards"
-           hx-swap="innerHTML">
-        <div class="card h-100 border-dashed text-center p-5 shadow-sm workspace-card">
-          <div class="card-body d-flex flex-column justify-content-center" role="button">
-            <i class="bi bi-plus-circle-dotted text-primary fs-1 mb-3"></i>
-            <h5 class="fw-bold text-secondary">Create New Task</h5>
-            <p class="text-muted">Click here to add a new task</p>
+      </div>
+      <div class="col-md-4 col-lg-3">
+        <div class="stat-card border-0 shadow-sm p-3 d-flex align-items-center">
+          <div class="rounded-circle bg-danger bg-opacity-10 p-3 me-3">
+            <i class="bi bi-exclamation-octagon text-danger fs-4"></i>
           </div>
+          <div>
+            <h6 class="mb-0 text-muted small">High Priority</h6>
+            <span class="fw-bold fs-5">{{ tasks_high|default:"0" }} Tasks</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-3">
+        <div class="stat-card border-0 shadow-sm p-3 d-flex align-items-center">
+          <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+            <i class="bi bi-check-all text-success fs-4"></i>
+          </div>
+          <div>
+            <h6 class="mb-0 text-muted small">Completed</h6>
+            <span class="fw-bold fs-5">{{ tasks_completed|default:"0" }} Tasks</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="row g-4 h-100">
+          <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm text-center p-4 workspace-card"
+                 style="cursor: pointer; transition: all 0.3s ease; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);"
+                 hx-get="{% url 'task:task-create' %}"
+                 hx-target="#workspace_cards"
+                 hx-swap="innerHTML">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                <div
+                    class="mb-3 rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow-sm"
+                    style="width: 60px; height: 60px;">
+                  <i class="bi bi-plus-lg fs-3"></i>
+                </div>
+                <h5 class="fw-bold">Create Task</h5>
+                <p class="text-muted small">Define a new issue, set deadline and assign developers.</p>
+                <span class="badge bg-light text-primary rounded-pill px-3 py-2 mt-2">Quick Action</span>
+              </div>
+            </div>
+          </div>
+
+          {% if task %}
+            <div class="col-md-6" id="update_block"
+                 hx-get="{% url 'task:task-update' task.pk %}"
+                 hx-target="#workspace_cards"
+                 hx-swap="innerHTML">
+              <div class="card h-100 border-0 shadow-sm text-center p-4 workspace-card"
+                   style="cursor: pointer; transition: all 0.3s ease; background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                  <div
+                      class="mb-3 rounded-circle bg-danger text-white d-flex align-items-center justify-content-center shadow-sm"
+                      style="width: 60px; height: 60px;">
+                    <i class="bi bi-pencil-square fs-3"></i>
+                  </div>
+                  <h5 class="fw-bold">Last Task</h5>
+                  <p class="text-muted small text-truncate" style="max-width: 200px;">"{{ task.name }}"</p>
+                  <p class="text-muted small">Continue working or update status of your last issue.</p>
+                  <span class="badge bg-light text-danger rounded-pill px-3 py-2 mt-2">Resume Work</span>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="stat-card border-0 shadow-sm p-4 h-100">
+          <h5 class="fw-bold mb-4">Recent Activity</h5>
+          <div class="activity-feed">
+            <div class="d-flex mb-3">
+              <div class="me-3"><i class="bi bi-circle-fill text-primary small"></i></div>
+              <div>
+                <p class="mb-0 small fw-bold">Coming</p>
+                <span class="text-muted" style="font-size: 0.75rem;">future</span>
+              </div>
+            </div>
+            <div class="d-flex mb-3">
+              <div class="me-3"><i class="bi bi-circle-fill text-success small"></i></div>
+              <div>
+                <p class="mb-0 small fw-bold">really</p>
+                <span class="text-muted" style="font-size: 0.75rem;">future</span>
+              </div>
+            </div>
+            <div class="d-flex mb-3">
+              <div class="me-3"><i class="bi bi-circle-fill text-warning small"></i></div>
+              <div>
+                <p class="mb-0 small fw-bold">soon!</p>
+                <span class="text-muted" style="font-size: 0.75rem;">future</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-secondary btn-sm w-100 mt-3 rounded-pill" data-bs-toggle="modal"
+                  data-bs-target="#logs_modal">
+            View All Logs
+          </button>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="modal fade" id="logs_modal" tabindex="-1" aria-labelledby="logsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title fw-bold" id="logsModalLabel">System Logs</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body text-center py-5">
+          <i class="bi bi-cone-striped fs-1 text-warning mb-3"></i>
+          <p class="text-muted">Detailed logs are currently under development. <br>Check back soon!</p>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+      .workspace-card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 1rem 3rem rgba(0, 0, 0, .1) !important;
+      }
+
+      .bg-opacity-10 {
+          --bs-bg-opacity: 0.1;
+      }
+  </style>
 {% endblock %}

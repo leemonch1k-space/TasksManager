@@ -2,77 +2,84 @@
 {% block header %} My tasks {% endblock %}
 {% block content %}
 
-<div class="input-group rounded flex-column align-items-center mb-3">
-  <form class="w-100"
-        hx-get="{% url 'task:task-search' %}"
-        hx-trigger="change, input changed delay:500ms"
-        hx-target="#tasks"
-        class="mb-4">
+  <div class="container-fluid py-4">
+    <div class="search-toolbar">
+      <form class="row g-3 align-items-center"
+            hx-get="{% url 'task:task-search' %}"
+            hx-trigger="change, input changed delay:500ms"
+            hx-target="#tasks">
 
-    <div class="row g-3 justify-content-center align-items-center">
-
-      <div class="col-md-auto">
-        <div class="btn btn-primary px-4 shadow-sm" id="create_block"
-             hx-get="{% url 'task:task-create' %}"
-             hx-target="#global_wrapper"
-             hx-swap="innerHTML">
-          <i class="bi bi-plus-lg me-1"></i> New task
+        <div class="col-md-auto">
+          <button type="button" class="btn btn-gradient-primary shadow-sm px-4 rounded-pill"
+                  hx-get="{% url 'task:task-create' %}"
+                  hx-target="#global_wrapper"
+                  hx-swap="innerHTML">
+            <i class="bi bi-plus-lg me-2"></i>New Task
+          </button>
         </div>
-      </div>
 
-      <div class="col-md-4">
-        <div class="input-group shadow-sm">
-          <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-          <input type="search" name="search" class="form-control border-start-0 ps-0"
-                 placeholder="Search by name..." value="{{ request.GET.search }}">
+        <div class="col-md">
+          <div class="input-group">
+          <span class="input-group-text bg-transparent border-0 ps-3 text-muted"
+                style="z-index: 5; margin-right: -40px;">
+            <i class="bi bi-search"></i>
+          </span>
+            <input type="search" name="search" class="form-control search-input-custom ps-5"
+                   placeholder="Search tasks by name..." value="{{ request.GET.search }}">
+          </div>
         </div>
-      </div>
 
-      <div class="col-md-2">
-        <select name="priority" class="form-select shadow-sm">
-          <option value="">Any priority</option>
-          <option value="LOW">Low</option>
-          <option value="MED">Medium</option>
-          <option value="HIGH">High</option>
-        </select>
-      </div>
+        <div class="col-md-auto" style="min-width: 160px;">
+          <div class="input-group">
+            <span class="input-group-text bg-light border-0 rounded-start" style="border-radius: 10px 0 0 10px;">
+                <i class="bi bi-flag text-muted"></i>
+            </span>
+            <select name="priority" class="form-select border-0 bg-light rounded-end"
+                    style="border-radius: 0 10px 10px 0; cursor: pointer;">
+              <option value="">All Priorities</option>
+              <option value="LOW">Low</option>
+              <option value="MED">Medium</option>
+              <option value="HIGH">High</option>
+            </select>
+          </div>
+        </div>
 
-      <div class="col-md-auto">
-        <div id="filter-completed-wrapper"
-             class="form-check form-switch p-2 px-4 rounded-pill border shadow-sm d-flex align-items-center transition-all {% if request.GET.is_completed == 'on' %}bg-success text-white border-success active-filter{% else %}bg-light text-secondary{% endif %}"
-             style="cursor: pointer;"
-             onclick="document.getElementById('flexSwitchCheckDefault').click();">
+        <div class="col-md-auto">
+          <div id="filter-completed-wrapper"
+               class="d-flex align-items-center px-3 py-2 rounded-pill border transition-all user-select-none {% if request.GET.is_completed == 'on' %}bg-success text-white border-success active-filter{% else %}bg-light text-secondary border-light{% endif %}"
+               style="cursor: pointer;"
+               onclick="document.getElementById('flexSwitchCheckDefault').click();">
 
-          <input name="is_completed"
-                 class="form-check-input mt-0 me-2 d-none"
-                 type="checkbox"
-                 id="flexSwitchCheckDefault"
-                 {% if request.GET.is_completed == 'on' %}checked{% endif %}
-                 hx-on:change="
+            <input name="is_completed"
+                   class="form-check-input d-none"
+                   type="checkbox"
+                   id="flexSwitchCheckDefault"
+                   {% if request.GET.is_completed == 'on' %}checked{% endif %}
+                   hx-on:change="
                    let wrapper = document.getElementById('filter-completed-wrapper');
                    if(this.checked) {
-                     wrapper.classList.remove('bg-light', 'text-secondary');
+                     wrapper.classList.remove('bg-light', 'text-secondary', 'border-light');
                      wrapper.classList.add('bg-success', 'text-white', 'border-success', 'active-filter');
                    } else {
-                     wrapper.classList.add('bg-light', 'text-secondary');
+                     wrapper.classList.add('bg-light', 'text-secondary', 'border-light');
                      wrapper.classList.remove('bg-success', 'text-white', 'border-success', 'active-filter');
                    }
                  "
-                 onclick="event.stopPropagation();"> <label class="form-check-label small fw-bold mb-0" for="flexSwitchCheckDefault" style="cursor: pointer;" onclick="event.stopPropagation();">
-            Completed
-          </label>
+                   onclick="event.stopPropagation();">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span class="small fw-bold">Completed</span>
+          </div>
         </div>
-      </div>
 
-      <div class="col-12 text-center mt-2">
-        <div class="htmx-indicator spinner-border text-primary spinner-border-sm" role="status"></div>
-      </div>
+        <div class="col-12 text-center htmx-indicator">
+          <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
 
-<div class="d-flex row g-4 align-center" id="tasks">
-  {% include "task/partials/task_list_chunk.html" %}
-</div>
+    <div class="row g-4" id="tasks">
+      {% include "task/partials/task_list_chunk.html" %}
+    </div>
+  </div>
 
 {% endblock %}

@@ -1,52 +1,72 @@
 {% load static %}
 {% if not task_list %}
-  <h1 class="text-center p-3">No task found!</h1>
+  <div class="col-12 text-center py-5">
+    <div class="mb-3 opacity-25">
+      <i class="bi bi-clipboard-x" style="font-size: 4rem;"></i>
+    </div>
+    <h4 class="text-muted">No tasks found</h4>
+    <p class="text-muted small">Try adjusting your search or filters</p>
+  </div>
 {% endif %}
 
 {% for task in task_list %}
-  <div class="col-md-3 card text-center border-dashed shadow-sm flex-column" role="button"
-       hx-get="{% url 'task:task-update' task.id %}?next={{ request.path }}"
-       hx-target="#global_wrapper"
-       hx-swap="innerHTML"
-  >
+  <div class="col-md-6 col-xl-4">
+    <div class="task-card-modern p-4 shadow-sm h-100 d-flex flex-column justify-content-between
+        {% if task.is_completed %}border-status-completed opacity-75
+        {% elif task.priority == 'HIGH' %}border-status-high
+        {% elif task.priority == 'MED' %}border-status-med
+        {% elif task.priority == 'LOW' %}border-status-low
+        {% else %}border-status-none{% endif %}"
+         role="button"
+         hx-get="{% url 'task:task-update' task.id %}?next={{ request.path }}"
+         hx-target="#global_wrapper"
+         hx-swap="innerHTML">
 
-    <div class="card-header">
-      {% if task.is_completed %}
-        <img src="{% static 'icons/completed.svg' %}" alt="completed" width="32" height="32"
-             class="rounded-circle me-2 float-start">
-      {% endif %}
-      {% if task.deadline %}
-        <i class="bi bi-calendar-x me-1"></i> {{ task.deadline }}
-      {% else %}
-        Without deadline
-      {% endif %}
-    </div>
+      <div>
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="d-flex align-items-center">
+            {% if task.is_completed %}
+              <span class="badge bg-success-soft text-success badge-soft me-2"><i class="bi bi-check2"></i> Done</span>
+            {% else %}
+              <span class="badge bg-primary-soft text-primary badge-soft me-2">In Progress</span>
+            {% endif %}
 
-    <div class="card-body">
-      <h5 class="card-title">{{ task.name }}</h5>
-      <p class="card-text">
-        <i class="bi bi-card-text me-2"></i>
-        {% if task.description %}{{ task.description }}{% else %}No description provided{% endif %}
-      </p>
-    </div>
+            {% if task.deadline %}
+              <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ task.deadline|date:"M d" }}</small>
+            {% endif %}
+          </div>
 
-    <div class="card-footer">
-      <i class="bi bi-tag me-1"></i>
-      {% if task.task_type %}{{ task.task_type }}{% else %}Type not defined{% endif %}
+          {% if task.priority == 'HIGH' %}<i class="bi bi-circle-fill text-danger small" title="High Priority"></i>
+          {% elif task.priority == 'MED' %}<i class="bi bi-circle-fill text-warning small" title="Medium Priority"></i>
+          {% elif task.priority == 'LOW' %}<i class="bi bi-circle-fill text-info small" title="Low Priority"></i>
+          {% endif %}
+        </div>
+
+        <h5 class="fw-bold mb-2 text-dark text-truncate">{{ task.name }}</h5>
+        <p class="text-muted small mb-4"
+           style="line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+          {% if task.description %}{{ task.description }}{% else %}No description provided...{% endif %}
+        </p>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center pt-3 border-top border-light">
+        <small class="text-muted fw-bold" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">
+          {% if task.task_type %}{{ task.task_type }}{% else %}General{% endif %}
+        </small>
+
+        <div class="d-flex align-items-center">
+          <i class="bi bi-arrow-right-short text-primary fs-4"></i>
+        </div>
+      </div>
     </div>
-    <div class="card-footer"><i class="bi bi-flag me-1"></i>{{ task.priority }}</div>
   </div>
 
   {% if forloop.last and page_obj.has_next %}
-    <div class="col-12 text-center py-5"
+    <div class="col-12 text-center py-4"
          hx-get="{{ request.path }}?page={{ page_obj.next_page_number }}&search={{ request.GET.search|default:'' }}&priority={{ request.GET.priority|default:'' }}&is_completed={{ request.GET.is_completed|default:'' }}"
          hx-trigger="revealed"
          hx-swap="outerHTML">
-
-      <div class="htmx-indicator spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-
+      <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
     </div>
   {% endif %}
 {% endfor %}

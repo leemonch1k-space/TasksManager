@@ -1,107 +1,168 @@
 {% load static %}
 
-<form hx-post="{% url 'task:task-create' %}"
-      hx-target="this"
-      hx-swap="innerHTML"
-      method="post"
-      novalidate
-      class="h-100 w-100 d-flex flex-column justify-content-center">
-  {% csrf_token %}
+<div class="container h-100 py-3 d-flex flex-column justify-content-center">
 
-  <div class="card shadow-sm border-0 h-100">
-    <div class="card-body p-4 text-center align-content-center">
+  <form hx-post="{% url 'task:task-create' %}"
+        hx-target="this"
+        hx-swap="innerHTML"
+        method="post"
+        novalidate
+        class="form-card-modern shadow h-100 d-flex flex-column position-relative">
 
-      <h4 class="mb-4 text-secondary"><i class="bi bi-plus-circle-dotted me-2"></i>New Task</h4>
+    {% csrf_token %}
+
+    <div class="form-header-modern text-center">
+      <h5 class="mb-0 fw-bold text-uppercase tracking-tight" style="color: #1a2a6c;">
+        <i class="bi bi-plus-circle-dotted me-2 text-primary"></i>New Task
+      </h5>
+    </div>
+
+    <div class="card-body p-4 p-lg-5 overflow-auto custom-scrollbar">
 
       <div class="mb-4">
         {% if form.name.errors %}
-          <div class="alert alert-danger" role="alert">
+          <div class="alert alert-danger rounded-3 mb-2 py-2 small shadow-sm">
             {{ form.name.errors }}
           </div>
         {% endif %}
-        {{ form.name }}
+        <div class="position-relative">
+          <div class="input-invisible-wrapper">
+            {{ form.name }}
+          </div>
+          <div class="text-center text-muted small mt-2 opacity-50">
+            Give your task a clear, concise name
+          </div>
+        </div>
       </div>
 
-      <div class="row g-3 mb-3">
+      <hr class="bg-light my-4">
+
+      <div class="row g-3 mb-4">
 
         <div class="col-md-4 toggle-block">
           <div
-              class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center cursor-pointer">
+              class="meta-box d-flex flex-column align-items-center justify-content-center text-center cursor-pointer position-relative">
             {% if form.deadline.errors %}
-              <div class="alert alert-danger" role="alert">
+              <div class="position-absolute top-0 start-50 translate-middle-x badge bg-danger rounded-pill shadow-sm"
+                   style="margin-top: -10px;">
                 incorrect date
               </div>
             {% endif %}
-            <div class="hide_on_click text-muted w-100" role="button">
-              <i class="bi bi-calendar-x me-1"></i> Set deadline
+
+            <div class="hide_on_click text-muted w-100 py-2" role="button">
+              <i class="bi bi-calendar-plus fs-4 d-block mb-2 text-primary opacity-50"></i>
+              <span class="small fw-bold text-uppercase">Set Deadline</span>
             </div>
             <div class="d-none open_after_click w-100">{{ form.deadline }}</div>
           </div>
         </div>
 
         <div class="col-md-4 toggle-block">
-          <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
+          <div
+              class="meta-box d-flex flex-column align-items-center justify-content-center text-center cursor-pointer position-relative">
             {% if form.priority.errors %}
-              <div class="alert alert-danger" role="alert">
-                {{ form.priority.errors }}
+              <div class="position-absolute top-0 start-50 translate-middle-x badge bg-danger rounded-pill shadow-sm"
+                   style="margin-top: -10px;">!
               </div>
             {% endif %}
-            <div class="hide_on_click text-muted w-100" role="button">
-              <i class="bi bi-flag me-1"></i> Set priority
+
+            <div class="hide_on_click text-muted w-100 py-2" role="button">
+              <i class="bi bi-flag fs-4 d-block mb-2 text-danger opacity-50"></i>
+              <span class="small fw-bold text-uppercase">Set Priority</span>
             </div>
             <div class="d-none open_after_click w-100">{{ form.priority }}</div>
           </div>
         </div>
 
         <div class="col-md-4 toggle-block">
-          <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
+          <div
+              class="meta-box d-flex flex-column align-items-center justify-content-center text-center cursor-pointer position-relative">
             {% if form.task_type.errors %}
-              <div class="alert alert-danger" role="alert">
-                {{ form.task_type.errors }}
+              <div class="position-absolute top-0 start-50 translate-middle-x badge bg-danger rounded-pill shadow-sm"
+                   style="margin-top: -10px;">!
               </div>
             {% endif %}
-            <div class="hide_on_click text-muted w-100" role="button">
-              <i class="bi bi-tag me-1"></i> Set type
+
+            <div class="hide_on_click text-muted w-100 py-2" role="button">
+              <i class="bi bi-tags fs-4 d-block mb-2 text-warning opacity-50"></i>
+              <span class="small fw-bold text-uppercase">Set Type</span>
             </div>
             <div class="d-none open_after_click w-100">{{ form.task_type }}</div>
           </div>
         </div>
       </div>
 
-      <div class="mb-3 toggle-block">
+      <div class="mb-4 toggle-block">
         {% if form.description.errors %}
-          <div class="alert alert-danger" role="alert">
-            {{ form.description.errors }}
-          </div>
+          <div class="alert alert-danger small py-1">{{ form.description.errors }}</div>
         {% endif %}
-        <div class="hide_on_click p-3 border rounded bg-light text-muted" role="button">
-          <i class="bi bi-card-text me-2"></i> Add description...
+
+        <div
+            class="hide_on_click p-3 border border-dashed rounded-3 bg-light text-muted d-flex align-items-center justify-content-center"
+            role="button" style="min-height: 80px;">
+          <span><i class="bi bi-text-paragraph me-2"></i> Click to add description...</span>
         </div>
-        <div class="d-none open_after_click">
+        <div class="d-none open_after_click p-3 border rounded-3 bg-white shadow-sm">
           {{ form.description }}
         </div>
       </div>
 
       <div class="mb-4 toggle-block">
         {% if form.assignees.errors %}
-          <div class="alert alert-danger" role="alert">
-            {{ form.assignees.errors }}
-          </div>
+          <div class="alert alert-danger small py-1">{{ form.assignees.errors }}</div>
         {% endif %}
-        <div class="hide_on_click p-2 border rounded bg-light text-center text-muted" role="button">
-          <i class="bi bi-person-fill-gear me-2"></i> Set assignees
+
+        <div class="hide_on_click p-2 border rounded-pill bg-light text-center text-muted w-100" role="button">
+          <small><i class="bi bi-person-plus-fill me-2"></i> Assign Team Members</small>
         </div>
-        <div class="d-none open_after_click p-3 border rounded bg-white">
-          <p class="small text-muted mb-2">Select team members:</p>
+        <div class="d-none open_after_click p-4 border rounded-3 bg-white shadow-sm mt-2 position-relative">
+          <label class="small fw-bold text-muted mb-3 d-block text-uppercase">Select Developers:</label>
           {{ form.assignees }}
         </div>
       </div>
 
-      <div class="d-flex justify-content-center gap-2 border-top pt-3">
-        <button type="submit" class="btn btn-primary px-4">Create Task</button>
-        <a href="{{ next }}" class="btn btn-outline-secondary px-4">Cancel</a>
-      </div>
-
     </div>
-  </div>
-</form>
+
+    <div class="card-footer bg-white border-top p-4">
+      <div class="d-flex justify-content-center gap-3">
+        <button type="submit" class="btn btn-gradient-primary px-5 py-2 rounded-pill shadow-sm fw-bold">
+          Create Task
+        </button>
+        <a href="{{ next }}" class="btn btn-light px-5 py-2 rounded-pill border fw-bold text-muted btn-cancel-custom">
+          Cancel
+        </a>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<style>
+    .input-invisible-wrapper input {
+        border: 1px solid transparent;
+        background: transparent;
+        font-size: 1.75rem;
+        font-weight: 700;
+        text-align: center;
+        width: 100%;
+        outline: none;
+        color: #1a2a6c;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+        transition: all 0.3s;
+    }
+
+    .input-invisible-wrapper input:focus {
+        border-bottom-color: #1a2a6c;
+    }
+
+    .input-invisible-wrapper input::placeholder {
+        color: #ccc;
+        font-weight: 400;
+    }
+
+    .btn-cancel-custom:hover {
+        background-color: #e2e6ea;
+        color: #333 !important;
+    }
+</style>

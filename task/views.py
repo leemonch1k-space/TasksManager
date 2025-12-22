@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -16,7 +17,19 @@ class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
 
-        last_task = Task.objects.filter(assignees=user).order_by("-id").first()
+        tasks = Task.objects.filter(assignees=user)
+
+        stats = tasks.aggregate(
+            task_count=Count("id"),
+            tasks_high=Count("id", filter=Q(priority="HIGH")),
+            tasks_completed=Count("id", filter=Q(is_completed=True)),
+        )
+
+        context["task_count"] = stats["task_count"]
+        context["tasks_high"] = stats["tasks_high"]
+        context["tasks_completed"] = stats["tasks_completed"]
+
+        last_task = tasks.order_by("-id").first()
 
         if last_task:
             context["task"] = last_task
@@ -24,6 +37,7 @@ class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
         else:
             context["task"] = None
             context["form"] = TaskForm(user=user)
+
         return context
 
 
