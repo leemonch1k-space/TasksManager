@@ -15,7 +15,11 @@ from task.models import Task
 
 User = get_user_model()
 
-class RegisterView(AnonymousRequiredMixin, generic.FormView):
+
+class RegisterView(
+    AnonymousRequiredMixin,
+    generic.FormView
+):
     form_class = RegistrationForm
     template_name = "registration/registration.html"
     success_url = reverse_lazy("login")
@@ -34,12 +38,19 @@ class RegisterView(AnonymousRequiredMixin, generic.FormView):
                     domain=domain,
                     token=token
                 )
-                messages.success(self.request, "Approve your email before log in.")
+                messages.success(
+                    self.request,
+                    "Approve your email before log in."
+                )
             except Exception:
-                messages.error(self.request, "Failed to send email. Please check your address or try later.")
+                messages.error(
+                    self.request,
+                    "Failed to send email. Please check your address or try later."  # noqa: E501
+                )
                 return self.form_invalid(form)
 
         return super().form_valid(form)
+
 
 class ActivateView(View):
     def get(self, request, uid, token):
@@ -61,11 +72,15 @@ class ActivateView(View):
 
                 messages.success(
                     request,
-                    "Thank you for confirming your email. Now you can login to your account.",
+                    "Thank you for confirming your email. Now you can login to your account.",  # noqa: E501
                 )
                 return redirect("login")
-        messages.error(self.request, "Email verification failed. Sign-up again.")
+        messages.error(
+            self.request,
+            "Email verification failed. Sign-up again."
+        )
         return redirect("login")
+
 
 class LoginView(AnonymousRequiredMixin, auth_views.LoginView):
     template_name = "registration/login.html"
@@ -77,14 +92,16 @@ class HomePageView(AnonymousRequiredMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["total_tasks"] = Task.objects.all().count()
-        context["completed_tasks"] = Task.objects.filter(is_completed=True).count()
+        context["completed_tasks"] = (Task.objects
+                                      .filter(is_completed=True)
+                                      .count()
+                                      )
         context["total_users"] = get_user_model().objects.all().count()
         return context
 
 
 class AboutPageView(AnonymousRequiredMixin, generic.TemplateView):
     template_name = "landing/about.html"
-
 
 
 class FeaturesPageView(AnonymousRequiredMixin, generic.TemplateView):

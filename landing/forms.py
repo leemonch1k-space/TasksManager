@@ -7,6 +7,7 @@ from task.models import Position
 
 User = get_user_model()
 
+
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     position = forms.ModelChoiceField(

@@ -1,5 +1,5 @@
 const SmartFormWatcher = {
-    storeState: function(container) {
+    storeState: function (container) {
         const inputs = container.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
             if (input.type === 'checkbox' || input.type === 'radio') {
@@ -10,7 +10,7 @@ const SmartFormWatcher = {
         });
     },
 
-    checkChanges: function(container) {
+    checkChanges: function (container) {
         const buttons = container.querySelectorAll('.appear-on-change');
         const inputs = container.querySelectorAll('input, textarea, select');
         let hasChanges = false;
@@ -34,7 +34,7 @@ const SmartFormWatcher = {
         });
     },
 
-    resetToOriginal: function(container) {
+    resetToOriginal: function (container) {
         const inputs = container.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
             if (input.type === 'checkbox' || input.type === 'radio') {
@@ -42,13 +42,13 @@ const SmartFormWatcher = {
             } else {
                 input.value = input.dataset.original;
             }
-            input.dispatchEvent(new Event('change', { bubbles: true }));
+            input.dispatchEvent(new Event('change', {bubbles: true}));
         });
 
         this.checkChanges(container);
     },
 
-    init: function(rootElement = document) {
+    init: function (rootElement = document) {
         const blocks = rootElement.querySelectorAll('.btn-on-change');
 
         blocks.forEach(container => {

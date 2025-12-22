@@ -5,12 +5,14 @@ from .models import TaskType, Position, Worker, Task
 admin.site.register(TaskType)
 admin.site.register(Position)
 
+
 @admin.register(Worker)
 class WorkerAdmin(UserAdmin):
     list_display = UserAdmin.list_display + ("position",)
     fieldsets = UserAdmin.fieldsets + (
         (("Custom fields", {"fields": ("position",)}),)
     )
+
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):

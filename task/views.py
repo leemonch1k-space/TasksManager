@@ -43,11 +43,20 @@ class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
 
 class TaskListView(LoginRequiredMixin, NextUrlMixin, generic.ListView):
     model = Task
-    queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
+    queryset = (
+        Task.objects
+        .select_related("task_type")
+        .prefetch_related("assignees")
+    )
     paginate_by = 16
+
     def get_queryset(self):
         user = self.request.user
-        return Task.objects.filter(assignees=user).select_related("task_type").order_by("-id")
+        return (Task.objects
+                .filter(assignees=user)
+                .select_related("task_type")
+                .order_by("-id")
+                )
 
     def get_template_names(self):
         if self.request.headers.get("HX-Request"):
@@ -102,13 +111,17 @@ class TaskCreateView(LoginRequiredMixin, NextUrlMixin, generic.CreateView):
         return response
 
     def get_success_url(self):
-        return reverse("task:task-update", kwargs={"pk":self.object.pk})
+        return reverse("task:task-update", kwargs={"pk": self.object.pk})
 
 
 class TaskUpdateView(LoginRequiredMixin, NextUrlMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
-    queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
+    queryset = (
+        Task.objects
+        .select_related("task_type")
+        .prefetch_related("assignees")
+    )
     template_name = "task/task_read_update.html"
 
     def get_success_url(self):
@@ -132,7 +145,6 @@ class TaskUpdateView(LoginRequiredMixin, NextUrlMixin, generic.UpdateView):
         return response
 
 
-
 class TaskDeleteView(LoginRequiredMixin, NextUrlMixin, View):
 
     def get_success_url(self):
@@ -140,7 +152,11 @@ class TaskDeleteView(LoginRequiredMixin, NextUrlMixin, View):
 
     def get(self, request, pk):
         task = get_object_or_404(Task, pk=pk)
-        return render(request, "task/partials/delete_confirm.html", {"task": task})
+        return render(
+            request,
+            "task/partials/delete_confirm.html",
+            {"task": task}
+        )
 
     def post(self, request, pk):
         task = get_object_or_404(Task, pk=pk)
@@ -149,5 +165,10 @@ class TaskDeleteView(LoginRequiredMixin, NextUrlMixin, View):
         response["HX-Redirect"] = self.get_success_url()
         return response
 
-class UserTasksPerformance(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
+
+class UserTasksPerformance(
+    LoginRequiredMixin,
+    NextUrlMixin,
+    generic.TemplateView
+):
     template_name = "task/performance.html"

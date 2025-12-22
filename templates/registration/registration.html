@@ -4,60 +4,63 @@
 {% block header %}Create Account | IssueOut{% endblock %}
 
 {% block guest_content %}
-<div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 90vh; background: transparent;">
+  <div class="container-fluid d-flex align-items-center justify-content-center"
+       style="min-height: 90vh; background: transparent;">
     <div class="row w-100 justify-content-center">
-        <div class="col-md-5 col-lg-4">
-            <div class="stat-card shadow-lg p-4 p-md-5">
-                <div class="text-center mb-4">
-                    <div class="stat-icon text-danger mb-3 mx-auto" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                        <i class="bi bi-person-plus-fill fs-1"></i>
-                    </div>
-                    <h2 class="fw-bold text-dark">Join IssueOut</h2>
-                    <p class="text-muted small">Start managing your IT projects efficiently</p>
-                </div>
-
-                {% if messages %}
-                <div class="messages mb-3">
-                    {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show border-0 shadow-sm" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                <form method="post" action="{% url 'registration' %}">
-                    {% csrf_token %}
-                    <div class="mb-4 custom-crispy-form">
-                        {{ form|crispy }}
-                    </div>
-                    <button type="submit" class="btn btn-gradient-primary w-100 py-3 mb-3">
-                        Create account
-                    </button>
-                </form>
-
-                <div class="text-center mt-3">
-                    <p class="text-muted small mb-0">
-                        Already have an account?
-                        <a href="{% url 'login' %}" class="fw-bold text-decoration-none" style="color: #b21f1f;">Log in!</a>
-                    </p>
-                </div>
+      <div class="col-md-5 col-lg-4">
+        <div class="stat-card shadow-lg p-4 p-md-5">
+          <div class="text-center mb-4">
+            <div class="stat-icon text-danger mb-3 mx-auto"
+                 style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+              <i class="bi bi-person-plus-fill fs-1"></i>
             </div>
-        </div>
-    </div>
-</div>
+            <h2 class="fw-bold text-dark">Join IssueOut</h2>
+            <p class="text-muted small">Start managing your IT projects efficiently</p>
+          </div>
 
-<style>
-    .custom-crispy-form input {
-        border-radius: 8px;
-        padding: 12px;
-        border: 1px solid #dee2e6;
-    }
-    .custom-crispy-form label {
-        font-weight: 500;
-        margin-bottom: 5px;
-        color: #495057;
-    }
-</style>
+          {% if messages %}
+            <div class="messages mb-3">
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show border-0 shadow-sm" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <form method="post" action="{% url 'registration' %}">
+            {% csrf_token %}
+            <div class="mb-4 custom-crispy-form">
+              {{ form|crispy }}
+            </div>
+            <button type="submit" class="btn btn-gradient-primary w-100 py-3 mb-3">
+              Create account
+            </button>
+          </form>
+
+          <div class="text-center mt-3">
+            <p class="text-muted small mb-0">
+              Already have an account?
+              <a href="{% url 'login' %}" class="fw-bold text-decoration-none" style="color: #b21f1f;">Log in!</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+      .custom-crispy-form input {
+          border-radius: 8px;
+          padding: 12px;
+          border: 1px solid #dee2e6;
+      }
+
+      .custom-crispy-form label {
+          font-weight: 500;
+          margin-bottom: 5px;
+          color: #495057;
+      }
+  </style>
 {% endblock %}

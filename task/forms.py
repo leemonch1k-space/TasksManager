@@ -13,21 +13,36 @@ class TaskForm(forms.ModelForm):
         super(TaskForm, self).__init__(*args, **kwargs)
 
         if self.user:
-            self.fields['assignees'].queryset = get_user_model().objects.exclude(pk=self.user.pk)
+            self.fields['assignees'].queryset = (get_user_model().objects
+                                                 .exclude(pk=self.user.pk))
 
     class Meta:
         model = Task
-        fields = ["name", "description", "deadline", "priority", "task_type", "assignees"]
+        fields = [
+            "name",
+            "description",
+            "deadline",
+            "priority",
+            "task_type",
+            "assignees"
+        ]
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control text-center", "placeholder": "Task Name"}),
+            "name": forms.TextInput(attrs={
+                "class": "form-control text-center",
+                "placeholder": "Task Name"
+            }),
             "description": forms.Textarea(
                 attrs={
-                "rows": 3,
-                "placeholder": "Add description",
-                "class": "form-control text-center align-content-center"
-            }),
+                    "rows": 3,
+                    "placeholder": "Add description",
+                    "class": "form-control text-center align-content-center"
+                }),
             "deadline": forms.DateInput(
-                attrs={"type": "date", "class": "form-control text-center", "role": "button"}
+                attrs={
+                    "type": "date",
+                    "class": "form-control text-center",
+                    "role": "button"
+                }
             ),
             "assignees": forms.CheckboxSelectMultiple(),
         }
@@ -35,13 +50,19 @@ class TaskForm(forms.ModelForm):
     priority = forms.ChoiceField(
         choices=Task.Priority.choices,
         required=False,
-        widget=forms.Select(attrs={"class": "form-control text-center", "role": "button"})
+        widget=forms.Select(attrs={
+            "class": "form-control text-center",
+            "role": "button"
+        })
     )
     task_type = forms.ModelChoiceField(
         queryset=TaskType.objects.all(),
         required=False,
         empty_label="Select type",
-        widget=forms.Select(attrs={"class": "form-control text-center", "role": "button"})
+        widget=forms.Select(attrs={
+            "class": "form-control text-center",
+            "role": "button"
+        })
     )
 
     def clean_deadline(self):
@@ -49,4 +70,3 @@ class TaskForm(forms.ModelForm):
         if date is not None and datetime.date.today() > date:
             raise ValidationError("Incorrect date")
         return date
-
