@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}IssueOut Features{% endblock %}
+
+{% block guest_content %}
+<div class="w-100" style="background-color: #f4f4f4; min-height: 100vh; margin-top: -1px;">
+
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="hero-title mb-4">Powerful Features for Tech Teams</h1>
+            <p class="hero-subtitle">
+                Everything you need to manage development tasks, track progress, and hit your deadlines with precision.
+            </p>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card h-100 border-0">
+                        <div class="stat-icon text-primary mb-3">
+                            <i class="bi bi-list-check fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold">Task Control</h4>
+                        <p class="text-muted small">
+                            Create tasks, set strict deadlines, and mark them as completed. Full CRUD support to keep your backlog clean.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card h-100 border-0">
+                        <div class="stat-icon text-danger mb-3">
+                            <i class="bi bi-tags fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold">Prioritization</h4>
+                        <p class="text-muted small">
+                            Define task types and set priority levels. Focus on what matters most with clear visual indicators.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card h-100 border-0">
+                        <div class="stat-icon text-warning mb-3">
+                            <i class="bi bi-person-plus fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold">Assignees</h4>
+                        <p class="text-muted small">
+                            Add specialists to specific tasks. Everyone knows their responsibilities within the project.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card h-100 border-0">
+                        <div class="stat-icon text-info mb-3">
+                            <i class="bi bi-search-heart fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold">Smart Search</h4>
+                        <p class="text-muted small">
+                            Find tasks instantly by title. No more digging through spreadsheets or long lists.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card h-100 border-0">
+                        <div class="stat-icon text-success mb-3">
+                            <i class="bi bi-filter-right fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold">Dynamic Filters</h4>
+                        <p class="text-muted small">
+                            Filter by priority or status. View only completed tasks or focus on urgent "To-Do" items.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="stat-card h-100 border-0">
+                        <div class="stat-icon text-dark mb-3">
+                            <i class="bi bi-lightning-charge fs-2"></i>
+                        </div>
+                        <h4 class="fw-bold">Fast UI</h4>
+                        <p class="text-muted small">
+                            Optimized for speed. Manage your workflow without any lag, powered by modern tech.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="container my-5" style="opacity: 0.1;">
+
+    <section class="pb-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="badge rounded-pill bg-primary px-3 py-2 mb-3">ROADMAP</span>
+                <h2 class="fw-bold">What's Coming Next?</h2>
+            </div>
+
+            <div class="row justify-content-center g-4">
+                <div class="col-lg-10">
+                    <div class="stat-card bg-white border-0 shadow-sm p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 text-center border-end">
+                                <h3 class="fw-bold text-primary">Q4 2025</h3>
+                                <p class="text-muted">Communication Hub</p>
+                            </div>
+                            <div class="col-md-8 ps-md-5">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><i class="bi bi-chat-left-dots me-2 text-primary"></i> <strong>Task Chats:</strong> Discuss details directly inside each task.</li>
+                                    <li class="mb-2"><i class="bi bi-hash me-2 text-primary"></i> <strong>Group Channels:</strong> Create space for teams or specific projects.</li>
+                                    <li><i class="bi bi-envelope me-2 text-primary"></i> <strong>Direct Messages:</strong> Private 1-on-1 communication for developers.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card bg-white border-0 shadow-sm p-4 mt-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 text-center border-end">
+                                <h3 class="fw-bold text-success">2026</h3>
+                                <p class="text-muted">Analytics & Insights</p>
+                            </div>
+                            <div class="col-md-8 ps-md-5">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><i class="bi bi-graph-up me-2 text-success"></i> <strong>Personal Stats:</strong> Track your own completion rate and efficiency.</li>
+                                    <li><i class="bi bi-bar-chart-steps me-2 text-success"></i> <strong>Team Velocity:</strong> Data-driven insights to improve team performance.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

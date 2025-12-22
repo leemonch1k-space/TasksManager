@@ -11,6 +11,7 @@ from landing.forms import RegistrationForm
 from landing.mixins import AnonymousRequiredMixin
 from landing.services.email_service import EmailService
 from landing.services.token_service import user_token_activation
+from task.models import Task
 
 User = get_user_model()
 
@@ -72,3 +73,19 @@ class LoginView(AnonymousRequiredMixin, auth_views.LoginView):
 
 class HomePageView(AnonymousRequiredMixin, generic.TemplateView):
     template_name = "landing/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total_tasks"] = Task.objects.all().count()
+        context["completed_tasks"] = Task.objects.filter(is_completed=True).count()
+        context["total_users"] = get_user_model().objects.all().count()
+        return context
+
+
+class AboutPageView(AnonymousRequiredMixin, generic.TemplateView):
+    template_name = "landing/about.html"
+
+
+
+class FeaturesPageView(AnonymousRequiredMixin, generic.TemplateView):
+    template_name = "landing/features.html"
