@@ -23,22 +23,36 @@
 </head>
 <body>
 <div class="container-fluid h-100">
-  <div class="row h-100">
-    <div class="col-sm-2  h-100 border-end bg-white">
+  {% if user.is_authenticated %}
 
-      {% block slider %}
-        {% include "includes/sidebar.html" %}
-      {% endblock %}
-
+    <div class="row h-100">
+      <div class="col-sm-2 h-100 border-end bg-white p-0">
+        {% block sidebar %}
+          {% include "includes/sidebar.html" %}
+        {% endblock %}
+      </div>
+      <div class="col-sm-10 h-100 d-flex flex-column p-4" id="global_wrapper">
+        {% block content %}{% endblock %}
+      </div>
     </div>
-    <div class="col-sm-10 h-100 d-flex flex-column p-4" id="global_wrapper">
 
-      {% block content %}{% endblock %}
+  {% else %}
+
+    <div class="row">
+        <div class="col-12 p-0">
+            {% block navbar %}
+                {% include "includes/sidebar.html" %}
+            {% endblock %}
+        </div>
     </div>
-  </div>
+    <div class="row">
+        <div class="col-12 p-4" id="global_wrapper">
+            {% block guest_content %}
+            {% endblock %}
+        </div>
+    </div>
+
+  {% endif %}
 </div>
-
-{% block scripts %}
-{% endblock %}
 </body>
 </html>

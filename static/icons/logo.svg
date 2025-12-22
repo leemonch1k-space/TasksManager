@@ -1,0 +1,42 @@
+<svg
+  width="220"
+  height="60"
+  viewBox="0 0 220 60"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient id="issueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d6efd"/>
+      <stop offset="100%" stop-color="#20c997"/>
+    </linearGradient>
+
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <g transform="translate(110, 38)" text-anchor="middle">
+    <text
+      x="-18"
+      y="0"
+      font-size="32"
+      font-weight="700"
+      font-family="Segoe UI, Inter, sans-serif"
+      fill="url(#issueGradient)"
+      filter="url(#softShadow)"
+    >
+      Issue
+    </text>
+
+    <text
+      x="52"
+      y="0"
+      font-size="32"
+      font-weight="700"
+      font-family="Segoe UI, Inter, sans-serif"
+      fill="#212529"
+    >
+      Out
+    </text>
+  </g>
+</svg>

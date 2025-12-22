@@ -134,3 +134,6 @@ class TaskDeleteView(LoginRequiredMixin, NextUrlMixin, View):
         response = HttpResponse("")
         response["HX-Redirect"] = self.get_success_url()
         return response
+
+class UserTasksPerformance(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
+    template_name = "task/performance.html"
