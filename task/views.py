@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic, View
 
@@ -50,13 +50,26 @@ class TaskListSearchView(generic.ListView):
         queryset = (Task.objects.filter(assignees=self.request.user)
                     .select_related("task_type")
                     .prefetch_related("assignees"))
+
         if search := self.request.GET.get("search"):
             queryset = queryset.filter(name__icontains=search)
 
         if priority := self.request.GET.get("priority"):
             queryset = queryset.filter(priority=priority)
 
+        if self.request.GET.get("is_completed") == "on":
+            queryset = queryset.filter(is_completed=True)
+
         return queryset
+
+
+class TaskToggleStatusView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        task = get_object_or_404(Task, pk=pk)
+        task.is_completed = not task.is_completed
+        task.save()
+
+        return redirect("task:task-update", pk=task.pk)
 
 
 class TaskCreateView(LoginRequiredMixin, NextUrlMixin, generic.CreateView):

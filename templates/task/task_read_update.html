@@ -27,94 +27,83 @@
             {{ form.name.errors }}
           </div>
         {% endif %}
-        {{ form.name }}
+
+        <div class="d-flex justify-content-center mb-3" id="task-status-container">
+          {% include "task/partials/task_status_badge.html" %}
+        </div>
+
+        <fieldset {% if task.is_completed %}disabled{% endif %} style="border: none; padding: 0; margin: 0;">
+          {{ form.name }}
+        </fieldset>
       </div>
 
-      <div class="row g-3 mb-3">
+      <fieldset {% if task.is_completed %}disabled{% endif %} style="border: none; padding: 0; margin: 0;">
 
-        <div class="col-md-4 toggle-block">
-          <div
-              class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center cursor-pointer">
-            {% if form.deadline.errors %}
-              <div class="alert alert-danger" role="alert">
-                incorrect date
+        <div class="row g-3 mb-3">
+          <div class="col-md-4 toggle-block">
+            <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center cursor-pointer">
+              {% if form.deadline.errors %}
+                <div class="alert alert-danger" role="alert">incorrect date</div>
+              {% endif %}
+              <div class="text-muted w-100">
+                <div class="user-select-none"><i class="bi bi-calendar-x me-1"></i> Deadline:</div>
+                <div class="open_after_click w-100 p-2">{{ form.deadline }}</div>
               </div>
-            {% endif %}
-            <div class="text-muted w-100">
-              <div class="user-select-none"><i class="bi bi-calendar-x me-1"></i> Update deadline:</div>
-              <div class="open_after_click w-100 p-2">{{ form.deadline }}</div>
+            </div>
+          </div>
+
+          <div class="col-md-4 toggle-block">
+            <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
+              <div class="text-muted w-100">
+                <div class="user-select-none"><i class="bi bi-flag me-1"></i> Priority</div>
+                <div class="open_after_click w-100 p-2">{{ form.priority }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 toggle-block">
+            <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
+              <div class="text-muted w-100">
+                <div class="user-select-none"><i class="bi bi-tag me-1"></i> Type</div>
+                <div class="w-100 p-2">{{ form.task_type }}</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-4 toggle-block">
-          <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
-            {% if form.priority.errors %}
-              <div class="alert alert-danger" role="alert">
-                {{ form.priority.errors }}
-              </div>
-            {% endif %}
-            <div class="text-muted w-100">
-              <div class="user-select-none"><i class="bi bi-flag me-1"></i> Update priority</div>
-              <div class="open_after_click w-100 p-2">{{ form.priority }}</div>
-            </div>
+        <div class="mb-3 toggle-block">
+          <div class="p-3 border rounded bg-light text-muted">
+            <div class="user-select-none"><i class="bi bi-card-text me-2"></i> Description</div>
+            <div class="p-2">{{ form.description }}</div>
           </div>
         </div>
 
-        <div class="col-md-4 toggle-block">
-          <div class="p-2 border rounded bg-light text-center h-100 d-flex align-items-center justify-content-center">
-            {% if form.task_type.errors %}
-              <div class="alert alert-danger" role="alert">
-                {{ form.task_type.errors }}
-              </div>
-            {% endif %}
-            <div class="text-muted w-100">
-              <div class="user-select-none"><i class="bi bi-tag me-1"></i> Update type</div>
-              <div class="w-100 p-2">{{ form.task_type }}</div>
-            </div>
+        <div class="mb-4 toggle-block">
+          <div class="hide_on_click p-2 border rounded bg-light text-center text-muted" role="button">
+            <i class="bi bi-person-fill-gear me-2"></i> View/Set assignees
+          </div>
+          <div class="d-none open_after_click p-3 border rounded bg-white">
+            <p class="small text-muted mb-2">Team members:</p>
+            {{ form.assignees }}
           </div>
         </div>
-      </div>
+      </fieldset>
 
-      <div class="mb-3 toggle-block">
-        {% if form.description.errors %}
-          <div class="alert alert-danger" role="alert">
-            {{ form.description.errors }}
-          </div>
-        {% endif %}
-        <div class="p-3 border rounded bg-light text-muted">
-          <div class="user-select-none"><i class="bi bi-card-text me-2"></i> Update description</div>
-          <div class="p-2">
-            {{ form.description }}
-          </div>
+      {% if not task.is_completed %}
+        <div class="d-flex justify-content-center gap-2 border-top pt-3 appear-on-change d-none">
+          <button type="submit" class="btn btn-primary px-4">Update</button>
+          <button type="button" class="btn btn-outline-secondary px-4 btn-cancel">Cancel</button>
         </div>
-      </div>
-
-      <div class="mb-4 toggle-block">
-        {% if form.assignees.errors %}
-          <div class="alert alert-danger" role="alert">
-            {{ form.assignees.errors }}
-          </div>
-        {% endif %}
-        <div class="hide_on_click p-2 border rounded bg-light text-center text-muted" role="button">
-          <i class="bi bi-person-fill-gear me-2"></i> Set assignees
+      {% else %}
+        <div class="text-muted small mt-3">
+          <i class="bi bi-info-circle"></i> Task is completed and cannot be edited.
         </div>
-        <div class="d-none open_after_click p-3 border rounded bg-white">
-          <p class="small text-muted mb-2">Select team members:</p>
-          {{ form.assignees }}
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-center gap-2 border-top pt-3 appear-on-change d-none">
-        <button type="submit" class="btn btn-primary px-4">Update</button>
-        <button class="btn btn-outline-secondary px-4 btn-cancel">Cancel</button>
-      </div>
+      {% endif %}
 
     </div>
   </div>
 </form>
 
 <div id="modal-container" class="modal fade" tabindex="-1">
-  <div class="modal-dialog" id="modal-content">
-  </div>
+  <div class="modal-dialog" id="modal-content"></div>
 </div>
