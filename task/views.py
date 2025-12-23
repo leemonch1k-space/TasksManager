@@ -1,13 +1,15 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic, View
 
-from task.forms import TaskForm
+from task.forms import TaskForm, UpdateUserDataForm
 from task.mixins import NextUrlMixin
-from task.models import Task, TaskType
+from task.models import Task, TaskType, Position
 
 
 class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
@@ -52,7 +54,6 @@ class TaskListView(LoginRequiredMixin, NextUrlMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
         context["task_types"] = TaskType.objects.all().values_list("name", flat=True)
 
         return context
@@ -179,7 +180,7 @@ class TaskDeleteView(LoginRequiredMixin, NextUrlMixin, View):
         return response
 
 
-class UserTasksPerformance(
+class UserTasksPerformanceView(
     LoginRequiredMixin,
     NextUrlMixin,
     generic.TemplateView
@@ -219,3 +220,19 @@ class UserTasksPerformance(
         })
 
         return context
+
+
+class UserSettingsView(LoginRequiredMixin, NextUrlMixin, SuccessMessageMixin, generic.UpdateView):
+    model = get_user_model()
+    form_class = UpdateUserDataForm
+    template_name = "task/settings.html"
+    success_message = "Your profile has been updated successfully!"
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        next_url = self.get_next_url()
+        base_url = reverse_lazy("task:settings")
+
+        return f"{base_url}?next={next_url}"

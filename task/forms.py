@@ -2,9 +2,10 @@ import datetime
 
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserChangeForm
 from django.core.exceptions import ValidationError
 
-from task.models import Task, TaskType
+from task.models import Task, TaskType, Position
 
 
 class TaskForm(forms.ModelForm):
@@ -70,3 +71,19 @@ class TaskForm(forms.ModelForm):
         if date is not None and datetime.date.today() > date:
             raise ValidationError("Incorrect date")
         return date
+
+
+class UpdateUserDataForm(UserChangeForm):
+    password = None
+
+    class Meta:
+        model = get_user_model()
+        fields = ["username", "email", "first_name", "last_name", "position"]
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control", "placeholder": "Username"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "First Name"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Last Name"}),
+            "position": forms.Select(),
+        }
+

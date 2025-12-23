@@ -8,7 +8,8 @@ from task.views import (
     TaskDeleteView,
     TaskListSearchView,
     TaskToggleStatusView,
-    UserTasksPerformance,
+    UserTasksPerformanceView,
+    UserSettingsView,
 )
 
 urlpatterns = [
@@ -31,7 +32,8 @@ urlpatterns = [
         TaskDeleteView.as_view(),
         name="task-delete"
     ),
-    path("performance", UserTasksPerformance.as_view(), name="performance"),
+    path("performance/", UserTasksPerformanceView.as_view(), name="performance"),
+    path("settings/", UserSettingsView.as_view(), name="settings"),
 ]
 
 app_name = "task"
