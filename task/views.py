@@ -7,7 +7,7 @@ from django.views import generic, View
 
 from task.forms import TaskForm
 from task.mixins import NextUrlMixin
-from task.models import Task
+from task.models import Task, TaskType
 
 
 class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
@@ -50,10 +50,17 @@ class TaskListView(LoginRequiredMixin, NextUrlMixin, generic.ListView):
     )
     paginate_by = 16
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context["task_types"] = TaskType.objects.all().values_list("name", flat=True)
+
+        return context
+
     def get_queryset(self):
         user = self.request.user
         return (Task.objects
-                .filter(assignees=user)
+                .filter(assignees=user, is_completed=False)
                 .select_related("task_type")
                 .order_by("-id")
                 )
@@ -77,11 +84,17 @@ class TaskListSearchView(generic.ListView):
         if search := self.request.GET.get("search"):
             queryset = queryset.filter(name__icontains=search)
 
+        if task_type := self.request.GET.get("task_type"):
+            queryset = queryset.filter(task_type__name=task_type)
+
         if priority := self.request.GET.get("priority"):
             queryset = queryset.filter(priority=priority)
 
         if self.request.GET.get("is_completed") == "on":
             queryset = queryset.filter(is_completed=True)
+        else:
+            queryset = queryset.filter(is_completed=False)
+
 
         return queryset
 

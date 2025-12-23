@@ -44,6 +44,21 @@
           </div>
         </div>
 
+      <div class="col-md-auto" style="min-width: 160px;">
+          <div class="input-group">
+            <span class="input-group-text bg-light border-0 rounded-start" style="border-radius: 10px 0 0 10px;">
+                <i class="bi bi-tag me-1 text-muted"></i>
+            </span>
+            <select name="task_type" class="form-select border-0 bg-light rounded-end"
+                    style="border-radius: 0 10px 10px 0; cursor: pointer;">
+              <option value="">All types</option>
+              {% for type_name in task_types %}
+              <option value="{{ type_name }}">{{ type_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
         <div class="col-md-auto">
           <div id="filter-completed-wrapper"
                class="d-flex align-items-center px-3 py-2 rounded-pill border transition-all user-select-none {% if request.GET.is_completed == 'on' %}bg-success text-white border-success active-filter{% else %}bg-light text-secondary border-light{% endif %}"
