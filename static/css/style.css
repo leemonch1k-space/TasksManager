@@ -512,25 +512,19 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
-/* --- Settings Page Styles --- */
-
 .settings-card {
     border: none;
-    border-radius: 1.5rem; /* Більше заокруглення */
-    overflow: hidden; /* Важливо, щоб картинка не вилазила за радіус */
+    border-radius: 1.5rem;
+    overflow: hidden;
     background: white;
-    /* Прибрали min-height, щоб не було лишнього скролу */
 }
 
-/* Ліва панель */
 .settings-sidebar {
-    /* Трішки змінений градієнт, менш агресивний */
     background: linear-gradient(135deg, #1a2a6c 0%, #c94b4b 100%);
     position: relative;
-    z-index: 1; /* Щоб контент був над декоративними колами */
+    z-index: 1;
 }
 
-/* Декорація (щоб не врізалась, робимо overflow: hidden на самому сайдбарі в HTML або тут) */
 .settings-sidebar::before {
     content: '';
     position: absolute;
@@ -544,19 +538,19 @@ body {
 }
 
 .settings-badge {
-    background-color: #ffffff !important; /* Білий фон */
-    color: #1a2a6c !important; /* Темно-синій текст для контрасту */
+    background-color: #ffffff !important;
+    color: #1a2a6c !important;
     font-weight: 700;
     padding: 0.5em 1em;
     border-radius: 50rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Легка тінь */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .avatar-circle-lg {
-    width: 100px; /* Трішки зменшив для акуратності */
+    width: 100px;
     height: 100px;
     background-color: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px); /* Ефект скла */
+    backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     display: flex;
@@ -567,13 +561,12 @@ body {
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-/* Тандем: Стилізація форми під стиль картки */
 .settings-content .form-control,
 .settings-content .form-select {
-    border-radius: 0.75rem; /* Більш круглі поля */
+    border-radius: 0.75rem;
     padding: 0.75rem 1rem;
-    border: 1px solid #f0f0f0; /* Дуже світла рамка */
-    background-color: #f8f9fa; /* Світло-сірий фон за замовчуванням */
+    border: 1px solid #f0f0f0;
+    background-color: #f8f9fa;
     font-size: 0.95rem;
     transition: all 0.3s ease;
 }
@@ -582,7 +575,7 @@ body {
 .settings-content .form-select:focus {
     background-color: #fff;
     border-color: #b21f1f;
-    box-shadow: 0 0 0 4px rgba(178, 31, 31, 0.05); /* Дуже ніжна тінь при фокусі */
+    box-shadow: 0 0 0 4px rgba(178, 31, 31, 0.05);
 }
 
 .settings-content label {
