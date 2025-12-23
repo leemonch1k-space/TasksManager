@@ -2,14 +2,10 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = "django-insecure-bxsv(z7zncgl!hq#mxp7w84w%eq^ta@t)y1gs*om^ai^$n1sc)"
-
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -31,6 +27,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -60,12 +57,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -95,6 +87,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_URL = "static/"
+STATIC_ROOT =  BASE_DIR / "staticfiles"
 
 
 INTERNAL_IPS = [
