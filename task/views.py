@@ -21,7 +21,7 @@ class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
 
         stats = tasks.aggregate(
             task_count=Count("id", filter=Q(is_completed=False)),
-            tasks_high=Count("id", filter=Q(priority="HIGH")),
+            tasks_high=Count("id", filter=Q(priority="HIGH", is_completed=False)),
             tasks_completed=Count("id", filter=Q(is_completed=True)),
         )
 
