@@ -17,10 +17,10 @@ class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
 
-        tasks = Task.objects.filter(assignees=user)
+        tasks = Task.objects.filter(assignees=user).select_related("task_type")
 
         stats = tasks.aggregate(
-            task_count=Count("id"),
+            task_count=Count("id", filter=Q(is_completed=False)),
             tasks_high=Count("id", filter=Q(priority="HIGH")),
             tasks_completed=Count("id", filter=Q(is_completed=True)),
         )
@@ -172,3 +172,37 @@ class UserTasksPerformance(
     generic.TemplateView
 ):
     template_name = "task/performance.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        user_tasks = Task.objects.filter(assignees=user).select_related("task_type")
+
+        total_count = user_tasks.count()
+        completed_count = user_tasks.filter(is_completed=True).count()
+
+        completion_rate = int((completed_count / total_count * 100)) if total_count > 0 else 0
+
+        priority_stats = user_tasks.aggregate(
+            high_total=Count('id', filter=Q(priority="HIGH")),
+            high_done=Count('id', filter=Q(priority="HIGH", is_completed=True)),
+            med_total=Count('id', filter=Q(priority="MED")),
+            med_done=Count('id', filter=Q(priority="MED", is_completed=True)),
+            low_total=Count('id', filter=Q(priority="LOW")),
+            low_done=Count('id', filter=Q(priority="LOW", is_completed=True)),
+        )
+
+        type_stats = (user_tasks.values('task_type__name')
+                      .annotate(count=Count('id'))
+                      .order_by('-count')[:4])
+
+        context.update({
+            "total_tasks": total_count,
+            "completed_tasks": completed_count,
+            "completion_rate": completion_rate,
+            "priority_stats": priority_stats,
+            "type_stats": type_stats,
+        })
+
+        return context
