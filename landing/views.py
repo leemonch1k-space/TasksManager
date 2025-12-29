@@ -25,61 +25,12 @@ class RegisterView(
     success_url = reverse_lazy("login")
 
     def form_valid(self, form):
-        with transaction.atomic():
-            form.instance.is_active = False
-            user = form.save()
-            schema = self.request.scheme
-            domain = get_current_site(self.request).domain
-            token = user_token_activation.make_token(user)
-            try:
-                EmailService.send_activation_email(
-                    user=user,
-                    schema=schema,
-                    domain=domain,
-                    token=token
-                )
-                messages.success(
-                    self.request,
-                    "Approve your email before log in."
-                )
-            except Exception:
-                messages.error(
-                    self.request,
-                    "Failed to send email. Please check your address or try later."  # noqa: E501
-                )
-                return self.form_invalid(form)
-
-        return super().form_valid(form)
-
-
-class ActivateView(View):
-    def get(self, request, uid, token):
-        try:
-            uid = urlsafe_base64_decode(uid).decode()
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-
-        if user is not None:
-            if user.is_active:
-                messages.info(request, "Your account is already activated.")
-
-                return redirect("login")
-
-            if user_token_activation.check_token(user, token):
-                user.is_active = True
-                user.save()
-
-                messages.success(
-                    request,
-                    "Thank you for confirming your email. Now you can login to your account.",  # noqa: E501
-                )
-                return redirect("login")
-        messages.error(
+        user = form.save()
+        messages.success(
             self.request,
-            "Email verification failed. Sign-up again."
+            "Account was created! Now you can login to your account."
         )
-        return redirect("login")
+        return super().form_valid(form)
 
 
 class LoginView(AnonymousRequiredMixin, auth_views.LoginView):
