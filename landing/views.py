@@ -1,16 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import views as auth_views, get_user_model
-from django.contrib.sites.shortcuts import get_current_site
-from django.db import transaction
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.http import urlsafe_base64_decode
-from django.views import generic, View
+from django.views import generic
 
 from landing.forms import RegistrationForm
 from landing.mixins import AnonymousRequiredMixin
-from landing.services.email_service import EmailService
-from landing.services.token_service import user_token_activation
 from task.models import Task
 
 User = get_user_model()
