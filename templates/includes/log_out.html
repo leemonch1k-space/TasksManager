@@ -1,0 +1,7 @@
+<form method="POST" action="{% url 'logout' %}" class="m-0">
+  {% csrf_token %}
+  <a href="#" class="dropdown-item"
+     onclick="this.closest('form').submit(); return false;">
+    Sign out
+  </a>
+</form>

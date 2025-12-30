@@ -1,0 +1,15 @@
+{% if task.is_completed %}
+  <div class="badge bg-success-soft text-success p-2 px-3 rounded-pill border border-success" role="button"
+       hx-post="{% url 'task:task-toggle-status' task.pk %}"
+       hx-target="#global_wrapper"
+       hx-swap="innerHTML">
+    <i class="bi bi-check-circle-fill me-1"></i> Task Completed
+  </div>
+{% else %}
+  <div class="badge bg-warning-soft text-warning p-2 px-3 rounded-pill border border-warning" role="button"
+       hx-post="{% url 'task:task-toggle-status' task.pk %}"
+       hx-target="#global_wrapper"
+       hx-swap="innerHTML">
+    <i class="bi bi-clock-history me-1"></i> In Progress
+  </div>
+{% endif %}

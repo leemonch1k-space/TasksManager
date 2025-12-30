@@ -1,0 +1,140 @@
+{% load static %}
+
+<div class="container h-100 py-3 d-flex flex-column justify-content-center">
+  <form method="post" action="{% url 'task:task-update' task.pk %}?next={{ next }}"
+        novalidate
+        class="form-card-modern shadow h-100 d-flex flex-column btn-on-change position-relative">
+    {% csrf_token %}
+
+    <div class="form-header-modern d-flex justify-content-between align-items-center">
+        <a href="{{ next }}" class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+
+        <div class="text-uppercase text-muted fw-bold small tracking-tight">Edit Task #{{ task.pk }}</div>
+
+        <button type="button"
+                class="btn btn-outline-danger border-0 rounded-circle"
+                style="width: 40px; height: 40px;"
+                hx-get="{% url 'task:task-delete' task.pk %}"
+                hx-target="#modal-content"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-container">
+          <i class="bi bi-trash3"></i>
+        </button>
+    </div>
+
+    <div class="card-body p-4 p-lg-5 overflow-auto custom-scrollbar">
+
+        {% if form.name.errors %}
+          <div class="alert alert-danger rounded-3 mb-4 shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ form.name.errors }}
+          </div>
+        {% endif %}
+
+        <div class="mb-4">
+            <fieldset {% if task.is_completed %}disabled{% endif %} class="border-0 p-0 m-0">
+                {{ form.name.errors }}
+                <input type="text" name="name" value="{{ form.name.value|default:'' }}"
+                       class="input-invisible mb-2" placeholder="Task Name" required id="id_name">
+            </fieldset>
+
+            <div class="d-flex justify-content-center" id="task-status-container">
+                {% include "task/partials/task_status_badge.html" %}
+            </div>
+        </div>
+
+        <hr class="bg-light my-4">
+
+        <fieldset {% if task.is_completed %}disabled{% endif %} class="border-0 p-0 m-0">
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-4 toggle-block">
+                    <div class="meta-box d-flex flex-column align-items-center justify-content-center text-center">
+                        <label class="small text-muted text-uppercase fw-bold mb-1"><i class="bi bi-calendar-event me-1"></i> Deadline</label>
+                        {% if form.deadline.errors %}<div class="text-danger small">Invalid date</div>{% endif %}
+                        <div class="open_after_click w-100 mt-1">{{ form.deadline }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 toggle-block">
+                    <div class="meta-box d-flex flex-column align-items-center justify-content-center text-center">
+                        <label class="small text-muted text-uppercase fw-bold mb-1"><i class="bi bi-flag me-1"></i> Priority</label>
+                        <div class="open_after_click w-100 mt-1">{{ form.priority }}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 toggle-block">
+                    <div class="meta-box d-flex flex-column align-items-center justify-content-center text-center">
+                        <label class="small text-muted text-uppercase fw-bold mb-1"><i class="bi bi-tag me-1"></i> Type</label>
+                        <div class="w-100 mt-1">{{ form.task_type }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4 toggle-block">
+                <label class="fw-bold mb-2 ps-1 text-dark"><i class="bi bi-text-left me-2"></i>Description</label>
+                <div class="p-3 border rounded-3 bg-light shadow-sm" style="min-height: 100px;">
+                    {{ form.description }}
+                </div>
+            </div>
+
+            <div class="mb-4 toggle-block">
+                 <div class="hide_on_click p-3 border border-dashed rounded-3 text-center bg-white text-muted user-select-none" role="button">
+                    <i class="bi bi-people-fill me-2"></i> Manage Team Members
+                 </div>
+                 <div class="d-none open_after_click p-4 border rounded-3 bg-white shadow-sm mt-2">
+                    <label class="small fw-bold text-muted mb-3 d-block">ASSIGNED TO:</label>
+                    {{ form.assignees }}
+                 </div>
+            </div>
+
+        </fieldset>
+    </div>
+
+    {% if not task.is_completed %}
+        <div class="card-footer bg-white border-top p-3 appear-on-change d-none position-absolute bottom-0 w-100 shadow-lg"
+             style="z-index: 10;">
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-primary px-5 rounded-pill fw-bold shadow-sm">
+                    Save Changes
+                </button>
+                <button type="button" class="btn btn-light px-5 rounded-pill border fw-bold btn-cancel">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    {% else %}
+        <div class="card-footer bg-light text-center py-3">
+            <small class="text-muted"><i class="bi bi-lock-fill me-1"></i> Task is completed (Read-only)</small>
+        </div>
+    {% endif %}
+
+  </form>
+</div>
+
+<div id="modal-container" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" id="modal-content"></div>
+</div>
+
+<style>
+    #id_name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+        border: 1px solid transparent;
+        background: transparent;
+        width: 100%;
+    }
+    #id_name:hover, #id_name:focus {
+        background: #f8f9fa;
+        border-color: #dee2e6;
+        border-radius: 8px;
+        outline: none;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #aaa; }
+</style>

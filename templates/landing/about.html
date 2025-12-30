@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}About IssueOut{% endblock %}
+
+{% block guest_content %}
+  <div class="w-100" style="background-color: #f4f4f4; min-height: 100vh; margin-top: -1px;">
+
+    <section class="hero-section text-center pb-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <h1 class="hero-title mb-4">Our Mission</h1>
+            <p class="hero-subtitle">
+              IssueOut is more than just a task manager. We are building an ecosystem for tech teams
+              where software development management becomes intuitive and performance becomes measurable.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="stat-card h-100 border-0">
+              <h3 class="fw-bold mb-3" style="color: #1a2a6c;">Why did we create it?</h3>
+              <p class="text-muted">
+                In the fast-paced world of development, chaotic task management is the main enemy of deadlines.
+                IssueOut helps structure the workflow so every developer knows exactly what to do next,
+                and managers see the real progress without unnecessary meetings.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="stat-card h-100 border-0">
+              <h3 class="fw-bold mb-3" style="color: #b21f1f;">How IssueOut helps you?</h3>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Precise deadline and priority
+                  control.
+                </li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Transparent workload
+                  distribution among developers.
+                </li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Fast search and filtering for
+                  any task.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5 bg-white-50">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="fw-bold">Powerful Toolset</h2>
+          <p class="text-muted">Features already helping teams work more efficiently</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4 text-center">
+            <i class="bi bi-kanban fs-1 text-primary mb-3"></i>
+            <h5>Flexible Management</h5>
+            <p class="small text-muted">Create tasks, set types, and assign priorities in seconds.</p>
+          </div>
+          <div class="col-md-4 text-center">
+            <i class="bi bi-people-fill fs-1 text-danger mb-3"></i>
+            <h5>Team Collaboration</h5>
+            <p class="small text-muted">Assign team members to specific tasks and manage the workspace.</p>
+          </div>
+          <div class="col-md-4 text-center">
+            <i class="bi bi-search fs-1 text-warning mb-3"></i>
+            <h5>Smart Search</h5>
+            <p class="small text-muted">Filter by priority or status and find tasks instantly by name.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5 mb-5">
+      <div class="container">
+        <div class="stat-card bg-dark text-white p-5 border-0 shadow-lg">
+          <div class="row align-items-center">
+            <div class="col-lg-7">
+              <h2 class="fw-bold mb-4">IssueOut Roadmap 🚀</h2>
+              <div class="d-flex mb-3">
+                <div class="me-3"><i class="bi bi-chat-dots-fill fs-3 text-info"></i></div>
+                <div>
+                  <h6>Integrated Communications</h6>
+                  <p class="small text-white-50">Task chats, group channels, and direct messaging for seamless code
+                    discussions.</p>
+                </div>
+              </div>
+              <div class="d-flex mb-3">
+                <div class="me-3"><i class="bi bi-graph-up-arrow fs-3 text-success"></i></div>
+                <div>
+                  <h6>Advanced Analytics</h6>
+                  <p class="small text-white-50">Deep insights into individual developer performance and overall team
+                    velocity.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+              <i class="bi bi-cpu" style="font-size: 8rem; opacity: 0.2;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}

@@ -3,24 +3,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-    <title>
-  {% block header %}
+  <title>
+    {% block header %}
       Home
-  {% endblock %}
-    </title>
+    {% endblock %}
+  </title>
+  <meta name="viewport" content="width=device-width initial-scale=1">
+  <script src="{% static 'js/fields_toggle.js' %}"></script>
+  <script src="{% static 'js/smart_button.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.js"
+          integrity="sha384-ezjq8118wdwdRMj+nX4bevEi+cDLTbhLAeFF688VK8tPDGeLUe0WoY2MZtSla72F"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-<div>
-  {% block slider %}
-    {% include "includes/sidebar.html" %}
-  {% endblock %}
-</div>
-<div>
-  {% block content %}
-  {% endblock %}
+<div class="container-fluid h-100">
+  {% if user.is_authenticated %}
+
+    <div class="row h-100">
+      <div class="col-sm-2 h-100 border-end bg-white p-0">
+        {% block sidebar %}
+          {% include "includes/sidebar.html" %}
+        {% endblock %}
+      </div>
+      <div class="col-sm-10 h-100 d-flex flex-column p-4" id="global_wrapper">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+
+  {% else %}
+
+    <div class="row">
+      <div class="col-12 p-0">
+        {% block navbar %}
+          {% include "includes/sidebar.html" %}
+        {% endblock %}
+      </div>
+    </div>
+    <div class="row">
+      {% block guest_content %}
+      {% endblock %}
+    </div>
+
+  {% endif %}
 </div>
 </body>
 </html>

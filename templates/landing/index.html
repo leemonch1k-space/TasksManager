@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block guest_content %}
+  <div class="w-100" style="background-color: #f4f4f4; min-height: 100vh; margin-top: -1px;">
+
+    <section class="hero-section text-center">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <h1 class="hero-title mb-4">Streamline Your IT Workflow with IssueOut</h1>
+            <p class="hero-subtitle mb-5">
+              The ultimate task management solution designed specifically for tech teams.
+              Assign tasks, set deadlines, and manage your developers' performance in one powerful workspace.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+              <a href="{% url 'registration' %}" class="btn btn-gradient-primary btn-lg shadow-sm">
+                Get Started for Free
+              </a>
+              <a href="{% url 'landing:features' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                Learn More
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-section">
+      <div class="container">
+        <div class="row g-4 text-center">
+          <div class="col-md-4">
+            <div class="stat-card">
+              <div class="stat-icon text-primary">
+                <i class="bi bi-layers-half"></i>
+              </div>
+              <h2 class="fw-bold text-dark">{{ total_tasks }}</h2>
+              <p class="text-muted mb-0">Total Tasks Created</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-card">
+              <div class="stat-icon text-success">
+                <i class="bi bi-check2-circle"></i>
+              </div>
+              <h2 class="fw-bold text-dark">{{ completed_tasks }}</h2>
+              <p class="text-muted mb-0">Tasks Completed Successfully</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-card">
+              <div class="stat-icon text-warning">
+                <i class="bi bi-people"></i>
+              </div>
+              <h2 class="fw-bold text-dark">{{ total_users }}</h2>
+              <p class="text-muted mb-0">Active IT Specialists</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}

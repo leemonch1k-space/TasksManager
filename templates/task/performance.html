@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block header %}
+  Performance Overview | IssueOut
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid py-4">
+
+    <div class="performance-header d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <div>
+        <h2 class="fw-bold mb-1">My Performance</h2>
+        <p class="mb-0 opacity-75">
+          <i class="bi bi-person-badge me-2"></i>{{ user.first_name }} {{ user.last_name }}
+          {% if user.position %}| {{ user.position }}{% endif %}
+        </p>
+      </div>
+      <div class="mt-3 mt-md-0 text-center">
+        <span class="display-4 fw-bold">{{ completion_rate }}<small class="fs-4">%</small></span>
+        <div class="small text-uppercase tracking-tight opacity-75">Completion Rate</div>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100 p-4">
+          <div class="d-flex align-items-center">
+            <div class="stat-icon-lg bg-icon-primary me-3">
+              <i class="bi bi-briefcase"></i>
+            </div>
+            <div>
+              <h3 class="fw-bold mb-0">{{ total_tasks }}</h3>
+              <p class="text-muted mb-0 small text-uppercase">Total Assigned</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100 p-4">
+          <div class="d-flex align-items-center">
+            <div class="stat-icon-lg bg-icon-success me-3">
+              <i class="bi bi-check2-all"></i>
+            </div>
+            <div>
+              <h3 class="fw-bold mb-0">{{ completed_tasks }}</h3>
+              <p class="text-muted mb-0 small text-uppercase">Tasks Completed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100 p-4">
+          <div class="d-flex align-items-center">
+            <div class="stat-icon-lg bg-icon-danger me-3">
+              <i class="bi bi-fire"></i>
+            </div>
+            <div>
+              <h3 class="fw-bold mb-0">{{ priority_stats.high_done }} <span class="text-muted fs-6">/ {{ priority_stats.high_total }}</span></h3>
+              <p class="text-muted mb-0 small text-uppercase">High Priority Cleared</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm p-4 h-100">
+          <h5 class="fw-bold mb-4 text-dark">Efficiency by Priority</h5>
+
+          <div class="mb-4">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="fw-bold text-danger"><i class="bi bi-arrow-up-circle me-2"></i>High Priority</span>
+              <small class="text-muted">{{ priority_stats.high_done }} of {{ priority_stats.high_total }} completed</small>
+            </div>
+            <div class="progress progress-custom">
+              <div class="progress-bar bg-danger progress-bar-animated-custom" role="progressbar"
+                   style="width: {% widthratio priority_stats.high_done priority_stats.high_total 100|default:0 %}%;"></div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="fw-bold text-warning"><i class="bi bi-dash-circle me-2"></i>Medium Priority</span>
+              <small class="text-muted">{{ priority_stats.med_done }} of {{ priority_stats.med_total }} completed</small>
+            </div>
+            <div class="progress progress-custom">
+              <div class="progress-bar bg-warning progress-bar-animated-custom" role="progressbar"
+                   style="width: {% widthratio priority_stats.med_done priority_stats.med_total 100|default:0 %}%;"></div>
+            </div>
+          </div>
+
+          <div class="mb-0">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="fw-bold text-success"><i class="bi bi-arrow-down-circle me-2"></i>Low Priority</span>
+              <small class="text-muted">{{ priority_stats.low_done }} of {{ priority_stats.low_total }} completed</small>
+            </div>
+            <div class="progress progress-custom">
+              <div class="progress-bar bg-success progress-bar-animated-custom" role="progressbar"
+                   style="width: {% widthratio priority_stats.low_done priority_stats.low_total 100|default:0 %}%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm p-4 h-100 bg-light">
+          <h5 class="fw-bold mb-4 text-dark">Top Task Types</h5>
+
+          {% if type_stats %}
+            <div class="d-grid gap-3">
+              {% for stat in type_stats %}
+                <div class="type-badge-card bg-white p-3 rounded-3 d-flex justify-content-between align-items-center">
+                  <span class="fw-bold text-secondary">
+                    <i class="bi bi-tag-fill me-2 text-primary"></i>{{ stat.task_type__name }}
+                  </span>
+                  <span class="badge bg-primary rounded-pill px-3">{{ stat.count }} tasks</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="text-center py-5 text-muted">
+              <i class="bi bi-clipboard-data fs-1 opacity-50"></i>
+              <p class="mt-2">No data available yet.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
