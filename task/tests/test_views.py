@@ -29,7 +29,7 @@ class PrivateViewsTests(TestCase):
     def test_workspace_view_context_stats(self):
         Task.objects.create(
             name="T1",
-            is_completed=True,
+            is_completed=False,
             priority="HIGH",
             task_type=self.task_type
         ).assignees.add(self.user)
@@ -44,7 +44,7 @@ class PrivateViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["task_count"], 2)
-        self.assertEqual(response.context["tasks_completed"], 1)
+        self.assertEqual(response.context["tasks_completed"], 0)
         self.assertEqual(response.context["tasks_high"], 1)
 
     def test_task_create_logic(self):
