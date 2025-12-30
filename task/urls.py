@@ -10,6 +10,7 @@ from task.views import (
     TaskToggleStatusView,
     UserTasksPerformanceView,
     UserSettingsView,
+    UserProfileView,
 )
 
 urlpatterns = [
@@ -34,6 +35,7 @@ urlpatterns = [
     ),
     path("performance/", UserTasksPerformanceView.as_view(), name="performance"),
     path("settings/", UserSettingsView.as_view(), name="settings"),
+    path("profile/<int:pk>/", UserProfileView.as_view(), name="profile"),
 ]
 
 app_name = "task"

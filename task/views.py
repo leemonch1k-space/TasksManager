@@ -9,7 +9,7 @@ from django.views import generic, View
 
 from task.forms import TaskForm, UpdateUserDataForm
 from task.mixins import NextUrlMixin
-from task.models import Task, TaskType, Position
+from task.models import Task, TaskType
 
 
 class WorkSpaceView(LoginRequiredMixin, NextUrlMixin, generic.TemplateView):
@@ -236,3 +236,33 @@ class UserSettingsView(LoginRequiredMixin, NextUrlMixin, SuccessMessageMixin, ge
         base_url = reverse_lazy("task:settings")
 
         return f"{base_url}?next={next_url}"
+
+
+class UserProfileView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "task/profile.html"
+
+    def get_context_data(self, pk: int, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = get_object_or_404(get_user_model(), pk=pk)
+
+        recent_activities = Task.objects.filter(
+            assignees=user,
+        ).order_by('-id')[:5]
+
+        high_tasks = Task.objects.filter(
+            assignees=user,
+            is_completed=False
+        ).order_by('deadline', '-priority')[:3]
+
+        colleagues = []
+        if user.position:
+            colleagues = get_user_model().objects.filter(
+                position=user.position
+            ).exclude(id=user.id)[:4]
+
+        context["profile_user"] = user
+        context["recent_activities"] = recent_activities
+        context["high_tasks"] = high_tasks
+        context["colleagues"] = colleagues
+
+        return context

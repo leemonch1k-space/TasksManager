@@ -100,7 +100,7 @@
         </div>
       </a>
       <ul class="dropdown-menu shadow-lg border-0 mt-2" aria-labelledby="dropdownUser2">
-        <li><a class="dropdown-item py-2" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+        <li><a class="dropdown-item py-2" href="{% url 'task:profile' user.id%}"><i class="bi bi-person me-2"></i>Profile</a></li>
         <li><a class="dropdown-item py-2" href="{% url 'task:settings' %}?next={{ request.path }}"><i class="bi bi-gear me-2"></i>Settings</a></li>
         <li>
           <hr class="dropdown-divider">
